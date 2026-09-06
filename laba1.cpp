@@ -150,3 +150,14 @@ int inputInt(string message){
         cout << "Ошибка! Введите целое число.\n";
     }
 }
+int inputPositiveInt(string message){
+    int number;
+    while (true){
+        number = inputInt(message);
+        if (number > 0)
+        {
+            return number;
+        }
+        cout << "Ошибка! Число должно быть больше 0.\n";
+    }
+}
