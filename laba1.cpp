@@ -161,3 +161,15 @@ int inputPositiveInt(string message){
         cout << "Ошибка! Число должно быть больше 0.\n";
     }
 }
+string inputString(string message){
+    string value;
+    while (true){
+        cout << message;
+        getline(cin, value);
+        if (!value.empty())
+        {
+            return value;
+        }
+        cout << "Ошибка! Строка не должна быть пустой.\n";
+    }
+}
