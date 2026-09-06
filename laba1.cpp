@@ -66,16 +66,72 @@ private:
     int number;
     int capacity;
     vector<Perfomance> performances;
-    vector<unt> soldTickets;
+    vector<int> soldTickets;
 public:
-Hall(int number, int capacity);
-void addPerformance(Performance performance);
-int getPerformanceCount();
-Performance& getPerformance(int index);
-int getSoldTickets(int index);
-int getNumber();
-intggetCapacity();
-bool sellTickets(int performanceIndex,int cout);
-void printPerformances();
-void printInfo();
+Hall(int number, int capacity){
+    this->number = number;
+    this->capacity = capacity;
+}
+void addPerformance(Performance performance){
+    performances.push_back(performance);
+    soldTickets.push_back(0);
+}
+int getPerformanceCount(){
+    return performances.size();
+}
+Performance& getPerformance(int index);{
+    return performances[index];
+}
+int getSoldTickets(int index){
+    return soldTickets[index];
+}
+int getNumber(){
+    return number;
+}
+intggetCapacity(){
+    return capacity;
+}
+bool sellTickets(int performanceIndex,int cout){
+        if (performanceIndex < 0 || performanceIndex >= performances.size())
+        {
+            cout << "Ошибка! Такого спектакля нет.\n";
+            return false;
+        }
+        if (count <= 0)
+        {
+            cout << "Ошибка! Количество билетов должно быть больше 0.\n";
+            return false;
+        }
+        if (soldTickets[performanceIndex] + count > capacity)
+        {
+            cout << "Ошибка! Нельзя продать столько билетов.\n";
+            cout << "Вместимость зала: " << capacity << endl;
+            cout << "Уже продано: " << soldTickets[performanceIndex] << endl;
+            cout << "Свободно: " << capacity - soldTickets[performanceIndex] << endl;
+            return false;
+        }
+        soldTickets[performanceIndex] += count;
+        cout << "Билеты успешно проданы.\n";
+        return true;
+}
+void printPerformances(){
+        if (performances.empty())
+        {
+            cout << "В этом зале нет спектаклей.\n";
+            return;
+        }
+        for (int i = 0; i < performances.size(); i++)
+        {
+            cout << "\nСпектакль №" << i + 1 << endl;
+            performances[i].printInfo();
+            cout << "Продано билетов: " << soldTickets[i] << endl;
+            cout << "Свободных мест: " << capacity - soldTickets[i] << endl;
+        }
+    }
+void printInfo(){
+        cout << "\n===== ИНФОРМАЦИЯ О ЗАЛЕ =====\n";
+        cout << "Номер зала: " << number << endl;
+        cout << "Вместимость: " << capacity << endl;
+        cout << "Количество спектаклей: " << performances.size() << endl;
+    }
 };
