@@ -135,3 +135,18 @@ void printInfo(){
         cout << "Количество спектаклей: " << performances.size() << endl;
     }
 };
+int inputInt(string message){
+    string input;
+    int number;
+    char extra;
+    while (true){
+        cout << message;
+        getline(cin, input);
+        stringstream ss(input);
+        if (ss >> number && !(ss >> extra))
+        {
+            return number;
+        }
+        cout << "Ошибка! Введите целое число.\n";
+    }
+}
