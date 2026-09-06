@@ -67,5 +67,15 @@ private:
     int capacity;
     vector<Perfomance> performances;
     vector<unt> soldTickets;
-
-}
+public:
+Hall(int number, int capacity);
+void addPerformance(Performance performance);
+int getPerformanceCount();
+Performance& getPerformance(int index);
+int getSoldTickets(int index);
+int getNumber();
+intggetCapacity();
+bool sellTickets(int performanceIndex,int cout);
+void printPerformances();
+void printInfo();
+};
