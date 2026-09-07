@@ -3,6 +3,7 @@
 #include <vector>
 #include <locale>
 #include <sstream>
+#include <string_
 using namespace std;
 int inputInt(const string& message);
 int inputPositiveInt(const string& message);
