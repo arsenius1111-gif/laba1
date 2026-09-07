@@ -21,24 +21,43 @@ private:
     int ageLimit;
 
 public:
-    Performance(string_view title_, string_view director_, string_view genre_, 
-                int duration_, int ageLimit_)
-        : title(title_), director(director_), genre(genre_), 
+    Performance(string_view title_, string_view director_, string_view genre_, int duration_, int ageLimit_)
+        : title(title_), genre(genre_), director(director_), 
           duration(duration_), ageLimit(ageLimit_)
     {
     }
 
-    void setTitle(string_view title_) { this->title = title_; }
-    void setDirector(string_view director_) { this->director = director_; }
-    void setGenre(string_view genre_) { this->genre = genre_; }
-    void setDuration(int duration_) { this->duration = duration_; }
-    void setAgeLimit(int ageLimit_) { this->ageLimit = ageLimit_; }
+    void setTitle(string_view title_){ 
+        this->title = title_; 
+    }
+    void setDirector(string_view director_){ 
+        this->director = director_;
+    }
+    void setGenre(string_view genre_){  
+        this->genre = genre_;
+    }
+    void setDuration(int duration_){ 
+        this->duration = duration_; 
+    }
+    void setAgeLimit(int ageLimit_){ 
+        this->ageLimit = ageLimit_;
+    }
 
-    string getTitle() const { return title; }
-    string getDirector() const { return director; }
-    string getGenre() const { return genre; }
-    int getDuration() const { return duration; }
-    int getAgeLimit() const { return ageLimit; }
+    string getTitle() const {
+         return title;
+    }
+    string getDirector() const { 
+        return director;
+    }
+    string getGenre() const { 
+        return genre; 
+    }
+    int getDuration() const {
+         return duration; 
+    }
+    int getAgeLimit() const { 
+        return ageLimit; 
+    }
 
     void printInfo() const {
         cout << "Название: " << title << endl;
