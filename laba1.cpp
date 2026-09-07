@@ -3,173 +3,183 @@
 #include <vector>
 #include <locale>
 #include <sstream>
-#include <string_
+#include <string_view>
+
 using namespace std;
-int inputInt(const string& message);
-int inputPositiveInt(const string& message);
-string inputString(const string& message);
+
+int inputInt(string_view message);
+int inputPositiveInt(string_view message);
+string inputString(string_view message);
 void printMenu();
-class Performance{
+
+class Performance {
 private:
     string title;
     string genre;
     string director;
     int duration;
     int ageLimit;
+
 public:
-    Performance(const string& title, const string& director, const string& genre, int duration, int ageLimit){
-        :title(title),director(director),genre(genre),duration(duration),ageLimit(ageLimit)
+    Performance(string_view title_, string_view director_, string_view genre_, 
+                int duration_, int ageLimit_)
+        : title(title_), director(director_), genre(genre_), 
+          duration(duration_), ageLimit(ageLimit_)
+    {
     }
-    void setTitle(const string& title){
-         this->title = title;
-    }
-    void setDirector(const string& director){
-       this->director = director; 
-    }
-    void setGenre(const string& genre){
-       this->genre = genre; 
-    }
-    void setDuration(int duration){
-         this->duration = duration;
-    }
-    void setAgeLimit(int ageLimit){
-        this->ageLimit = ageLimit;
-    }
-    string getTitle() const{
-        return title;
-    }
-    string getDirector() const{
-        return director;
-    }
-    string getGenre() const{
-        return genre;
-    }
-    int getDuration() const{
-        return duration;
-    }
-    int getAgeLimit() const{
-        return ageLimit;
-    }
+
+    void setTitle(string_view title_) { this->title = title_; }
+    void setDirector(string_view director_) { this->director = director_; }
+    void setGenre(string_view genre_) { this->genre = genre_; }
+    void setDuration(int duration_) { this->duration = duration_; }
+    void setAgeLimit(int ageLimit_) { this->ageLimit = ageLimit_; }
+
+    string getTitle() const { return title; }
+    string getDirector() const { return director; }
+    string getGenre() const { return genre; }
+    int getDuration() const { return duration; }
+    int getAgeLimit() const { return ageLimit; }
+
     void printInfo() const {
-        cout << "Название" << title << end1;
-        cout << "Режиссер" << director << end1;
-        cout << "Жанр" << genre << end1;
-        cout << "Продолжительность" << duration << "мин." << end1;
-        cout << "Возрастное ограичение" << ageLimit << "+" << end1;
+        cout << "Название: " << title << endl;
+        cout << "Режиссёр: " << director << endl;
+        cout << "Жанр: " << genre << endl;
+        cout << "Продолжительность: " << duration << " мин." << endl;
+        cout << "Возрастное ограничение: " << ageLimit << "+" << endl;
     }
 };
-class Hall{
+
+class Hall {
 private:
     int number;
     int capacity;
     vector<Performance> performances;
     vector<int> soldTickets;
+
 public:
-Hall(int number, int capacity){
-    :number(number),capacity(capacity)
-}
-void addPerformance(const Performance& performance){
-    performances.push_back(performance);
-    soldTickets.push_back(0);
-}
-int getPerformanceCount() const {
-    return performances.size();
-}
-const Performance& getPerformance(int index) const {
-    return performances[index];
-}
-int getSoldTickets(int index) const {
-    return soldTickets[index];
-}
-int getNumber() const {
-    return number;
-}
-intggetCapacity() const {
-    return capacity;
-}
-bool sellTickets(int performanceIndex,int cout){
-        if (performanceIndex < 0 || performanceIndex >= performances.size())
-        {
+    Hall(int number_, int capacity_)
+        : number(number_), capacity(capacity_)
+    {
+    }
+
+    void addPerformance(const Performance& performance) {
+        performances.push_back(performance);
+        soldTickets.push_back(0);
+    }
+
+    int getPerformanceCount() const {
+        return (int)performances.size();
+    }
+
+    const Performance& getPerformance(int index) const {
+        return performances[index];
+    }
+
+    int getSoldTickets(int index) const {
+        return soldTickets[index];
+    }
+
+    int getNumber() const {
+        return number;
+    }
+
+    int getCapacity() const {
+        return capacity;
+    }
+
+    bool sellTickets(int performanceIndex, int count) {
+        if (performanceIndex < 0 || performanceIndex >= (int)performances.size()) {
             cout << "Ошибка! Такого спектакля нет.\n";
             return false;
         }
-        if (count <= 0)
-        {
+
+        if (count <= 0) {
             cout << "Ошибка! Количество билетов должно быть больше 0.\n";
             return false;
         }
-        if (soldTickets[performanceIndex] + count > capacity)
-        {
+
+        if (soldTickets[performanceIndex] + count > capacity) {
             cout << "Ошибка! Нельзя продать столько билетов.\n";
             cout << "Вместимость зала: " << capacity << endl;
             cout << "Уже продано: " << soldTickets[performanceIndex] << endl;
             cout << "Свободно: " << capacity - soldTickets[performanceIndex] << endl;
             return false;
         }
+
         soldTickets[performanceIndex] += count;
         cout << "Билеты успешно проданы.\n";
         return true;
-}
-void printPerformances() const {
-        if (performances.empty())
-        {
+    }
+
+    void printPerformances() const {
+        if (performances.empty()) {
             cout << "В этом зале нет спектаклей.\n";
             return;
         }
-        for (int i = 0; i < performances.size(); i++)
-        {
+
+        for (int i = 0; i < (int)performances.size(); i++) {
             cout << "\nСпектакль №" << i + 1 << endl;
             performances[i].printInfo();
             cout << "Продано билетов: " << soldTickets[i] << endl;
             cout << "Свободных мест: " << capacity - soldTickets[i] << endl;
         }
     }
-void printInfo() const {
+
+    void printInfo() const {
         cout << "\n===== ИНФОРМАЦИЯ О ЗАЛЕ =====\n";
         cout << "Номер зала: " << number << endl;
         cout << "Вместимость: " << capacity << endl;
         cout << "Количество спектаклей: " << performances.size() << endl;
     }
 };
-int inputInt(const string&   message){
+
+int inputInt(string_view message) {
     string input;
     int number;
     char extra;
-    while (true){
-        cout << message;
+
+    while (true) {
+        cout << message.data();
         getline(cin, input);
-        stringstream ss(input);
-        if (ss >> number && !(ss >> extra))
-        {
+
+        if (stringstream ss(input); ss >> number && !(ss >> extra)) {
             return number;
         }
+
         cout << "Ошибка! Введите целое число.\n";
     }
 }
-int inputPositiveInt(const string& message){
+
+int inputPositiveInt(string_view message) {
     int number;
-    while (true){
+
+    while (true) {
         number = inputInt(message);
-        if (number > 0)
-        {
+
+        if (number > 0) {
             return number;
         }
+
         cout << "Ошибка! Число должно быть больше 0.\n";
     }
 }
-string inputString(const string& message){
+
+string inputString(string_view message) {
     string value;
-    while (true){
-        cout << message;
+
+    while (true) {
+        cout << message.data();
         getline(cin, value);
-        if (!value.empty())
-        {
+
+        if (!value.empty()) {
             return value;
         }
+
         cout << "Ошибка! Строка не должна быть пустой.\n";
     }
 }
-void printMenu(){
+
+void printMenu() {
     cout << "\n========== МЕНЮ ==========\n";
     cout << "1. Показать информацию о зале\n";
     cout << "2. Показать спектакли\n";
@@ -180,10 +190,9 @@ void printMenu(){
     cout << "0. Выход\n";
     cout << "===========================\n";
 }
-void handlePerformanceAction(Hall* selectedHall, int choice)
-{
-    if (selectedHall->getPerformanceCount() == 0)
-    {
+
+void handlePerformanceAction(Hall* selectedHall, int choice) {
+    if (selectedHall->getPerformanceCount() == 0) {
         cout << "В зале нет спектаклей.\n";
         return;
     }
@@ -191,21 +200,18 @@ void handlePerformanceAction(Hall* selectedHall, int choice)
     selectedHall->printPerformances();
     int index = inputInt("\nВведите номер спектакля: ");
 
-    if (index < 1 || index > selectedHall->getPerformanceCount())
-    {
+    if (index < 1 || index > selectedHall->getPerformanceCount()) {
         cout << "Ошибка! Неверный номер спектакля.\n";
         return;
     }
 
     index--;
 
-    if (choice == 3) // продажа билетов
-    {
+    if (choice == 3) {
         int count = inputPositiveInt("Введите количество билетов: ");
         selectedHall->sellTickets(index, count);
     }
-    else if (choice == 4) // изменение данных
-    {
+    else if (choice == 4) {
         cout << "\nЧто изменить?\n";
         cout << "1. Название\n";
         cout << "2. Режиссёр\n";
@@ -215,8 +221,7 @@ void handlePerformanceAction(Hall* selectedHall, int choice)
 
         int field = inputInt("Выберите характеристику: ");
 
-        switch (field)
-        {
+        switch (field) {
         case 1:
             selectedHall->getPerformance(index).setTitle(inputString("Новое название: "));
             break;
@@ -236,8 +241,7 @@ void handlePerformanceAction(Hall* selectedHall, int choice)
             cout << "Ошибка! Неверный пункт.\n";
         }
     }
-    else if (choice == 5) // получить характеристику
-    {
+    else if (choice == 5) {
         cout << "\nЧто вывести?\n";
         cout << "1. Название\n";
         cout << "2. Режиссёр\n";
@@ -247,8 +251,7 @@ void handlePerformanceAction(Hall* selectedHall, int choice)
 
         int field = inputInt("Выберите характеристику: ");
 
-        switch (field)
-        {
+        switch (field) {
         case 1:
             cout << "Название: " << selectedHall->getPerformance(index).getTitle() << endl;
             break;
@@ -268,15 +271,15 @@ void handlePerformanceAction(Hall* selectedHall, int choice)
             cout << "Ошибка! Неверный пункт.\n";
         }
     }
-    else if (choice == 6) // полная информация
-    {
+    else if (choice == 6) {
         cout << "\n===== ПОЛНАЯ ИНФОРМАЦИЯ =====\n";
         selectedHall->getPerformance(index).printInfo();
         cout << "Продано билетов: " << selectedHall->getSoldTickets(index) << endl;
         cout << "Свободных мест: " << selectedHall->getCapacity() - selectedHall->getSoldTickets(index) << endl;
     }
 }
-int main(){
+
+int main() {
     setlocale(LC_ALL, "Russian");
 
     Performance p1("Гамлет", "Сергей Иванов", "Драма", 180, 16);
@@ -292,30 +295,26 @@ int main(){
 
     int choice;
 
-    do
-    {
+    do {
         printMenu();
         choice = inputInt("Выберите пункт меню: ");
 
         Hall* selectedHall = nullptr;
 
-        if (choice >= 1 && choice <= 6)
-        {
+        if (choice >= 1 && choice <= 6) {
             int hallNumber = inputInt("Введите номер зала (1 или 2): ");
 
             if (hallNumber == 1)
                 selectedHall = &hall1;
             else if (hallNumber == 2)
                 selectedHall = &hall2;
-            else
-            {
+            else {
                 cout << "Ошибка! Такого зала нет.\n";
                 continue;
             }
         }
 
-        switch (choice)
-        {
+        switch (choice) {
         case 1:
             selectedHall->printInfo();
             break;
