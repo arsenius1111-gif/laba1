@@ -4,7 +4,7 @@
 #include <locale>
 #include <sstream>
 using namespace std;
-int inputInt(string message);
+int inputInt(const string& message);
 int inputPositiveInt(string message);
 string inputString(string message);
 void printMenu();
@@ -29,7 +29,7 @@ public:
     void setDirector(string director){
        this->director = director; 
     }
-    vod setGenre(string genre){
+    void setGenre(string genre){
        this->genre = genre; 
     }
     void setDuration(int duration){
@@ -65,7 +65,7 @@ class Hall{
 private:
     int number;
     int capacity;
-    vector<Perfomance> performances;
+    vector<Performance> performances;
     vector<int> soldTickets;
 public:
 Hall(int number, int capacity){
