@@ -6,7 +6,7 @@
 using namespace std;
 int inputInt(const string& message);
 int inputPositiveInt(const string& message);
-string inputString(string& message);
+string inputString(const string& message);
 void printMenu();
 class Performance{
 private:
@@ -16,20 +16,16 @@ private:
     int duration;
     int ageLimit;
 public:
-    Performance(string title, string director, string genre, int duration, int ageLimit){
-        this->title = title;
-        this->director = director;
-        this->genre = genre;
-        this->duration = duration;
-        this->ageLimit = ageLimit;
+    Performance(const string& title, const string& director, const string& genre, int duration, int ageLimit){
+        :title(title),director(director),genre(genre),duration(duration),ageLimit(ageLimit)
     }
-    void setTitle(string title){
+    void setTitle(const string& title){
          this->title = title;
     }
-    void setDirector(string director){
+    void setDirector(const string& director){
        this->director = director; 
     }
-    void setGenre(string genre){
+    void setGenre(const string& genre){
        this->genre = genre; 
     }
     void setDuration(int duration){
@@ -38,22 +34,22 @@ public:
     void setAgeLimit(int ageLimit){
         this->ageLimit = ageLimit;
     }
-    string getTitle(){
+    string getTitle() const{
         return title;
     }
-    string getDirector(){
+    string getDirector() const{
         return director;
     }
-    string getGenre(){
+    string getGenre() const{
         return genre;
     }
-    int getDuration(){
+    int getDuration() const{
         return duration;
     }
-    int getAgeLimit(){
+    int getAgeLimit() const{
         return ageLimit;
     }
-    void printInfo(){
+    void printInfo() const {
         cout << "Название" << title << end1;
         cout << "Режиссер" << director << end1;
         cout << "Жанр" << genre << end1;
@@ -69,26 +65,25 @@ private:
     vector<int> soldTickets;
 public:
 Hall(int number, int capacity){
-    this->number = number;
-    this->capacity = capacity;
+    :number(number),capacity(capacity)
 }
-void addPerformance(Performance performance){
+void addPerformance(const Performance& performance){
     performances.push_back(performance);
     soldTickets.push_back(0);
 }
-int getPerformanceCount(){
+int getPerformanceCount() const {
     return performances.size();
 }
-Performance& getPerformance(int index);{
+const Performance& getPerformance(int index) const {
     return performances[index];
 }
-int getSoldTickets(int index){
+int getSoldTickets(int index) const {
     return soldTickets[index];
 }
-int getNumber(){
+int getNumber() const {
     return number;
 }
-intggetCapacity(){
+intggetCapacity() const {
     return capacity;
 }
 bool sellTickets(int performanceIndex,int cout){
@@ -114,7 +109,7 @@ bool sellTickets(int performanceIndex,int cout){
         cout << "Билеты успешно проданы.\n";
         return true;
 }
-void printPerformances(){
+void printPerformances() const {
         if (performances.empty())
         {
             cout << "В этом зале нет спектаклей.\n";
@@ -128,7 +123,7 @@ void printPerformances(){
             cout << "Свободных мест: " << capacity - soldTickets[i] << endl;
         }
     }
-void printInfo(){
+void printInfo() const {
         cout << "\n===== ИНФОРМАЦИЯ О ЗАЛЕ =====\n";
         cout << "Номер зала: " << number << endl;
         cout << "Вместимость: " << capacity << endl;
