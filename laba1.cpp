@@ -5,8 +5,8 @@
 #include <sstream>
 using namespace std;
 int inputInt(const string& message);
-int inputPositiveInt(string message);
-string inputString(string message);
+int inputPositiveInt(const string& message);
+string inputString(string& message);
 void printMenu();
 class Performance{
 private:
@@ -135,7 +135,7 @@ void printInfo(){
         cout << "Количество спектаклей: " << performances.size() << endl;
     }
 };
-int inputInt(string message){
+int inputInt(const string&   message){
     string input;
     int number;
     char extra;
@@ -150,7 +150,7 @@ int inputInt(string message){
         cout << "Ошибка! Введите целое число.\n";
     }
 }
-int inputPositiveInt(string message){
+int inputPositiveInt(const string& message){
     int number;
     while (true){
         number = inputInt(message);
@@ -161,7 +161,7 @@ int inputPositiveInt(string message){
         cout << "Ошибка! Число должно быть больше 0.\n";
     }
 }
-string inputString(string message){
+string inputString(const string& message){
     string value;
     while (true){
         cout << message;
