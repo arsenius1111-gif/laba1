@@ -1,27 +1,30 @@
-#include "../include/Performance.h"
+#include "Performance.h"
 #include <iostream>
+#include <utility>
 
-using namespace std;
+Performance::Performance(std::string title_, std::string director_, std::string genre_, int duration_, int ageRestriction_)
+    : title(std::move(title_)), director(std::move(director_)), genre(std::move(genre_)), duration(duration_), ageRestriction(ageRestriction_) {}
 
-Performance::Performance(string_view title_, string_view director_, string_view genre_, int duration_, int ageLimit_)
-    : title(title_), genre(genre_), director(director_), duration(duration_), ageLimit(ageLimit_) {}
-
-void Performance::setTitle(string_view title_) { this->title = title_; }
-void Performance::setDirector(string_view director_) { this->director = director_; }
-void Performance::setGenre(string_view genre_) { this->genre = genre_; }
-void Performance::setDuration(int duration_) { this->duration = duration_; }
-void Performance::setAgeLimit(int ageLimit_) { this->ageLimit = ageLimit_; }
-
-string Performance::getTitle() const { return title; }
-string Performance::getDirector() const { return director; }
-string Performance::getGenre() const { return genre; }
+std::string Performance::getTitle() const { return title; }
+std::string Performance::getDirector() const { return director; }
+std::string Performance::getGenre() const { return genre; }
 int Performance::getDuration() const { return duration; }
-int Performance::getAgeLimit() const { return ageLimit; }
+int Performance::getAgeRestriction() const { return ageRestriction; }
 
-void Performance::printInfo() const {
-    cout << "Название: " << title << "\n"
-         << "Режиссёр: " << director << "\n"
-         << "Жанр: " << genre << "\n"
-         << "Продолжительность: " << duration << " мин.\n"
-         << "Возрастное ограничение: " << ageLimit << "+\n";
+void Performance::setTitle(const std::string& newTitle) {
+    if (!newTitle.empty()) {
+        title = newTitle;
+    }
+}
+
+void Performance::setDuration(int newDuration) {
+    if (newDuration > 0) {
+        duration = newDuration;
+    }
+}
+
+void Performance::displayInfo() const {
+    std::cout << "Спектакль: \"" << title << "\" | Режиссер: " << director 
+              << " | Жанр: " << genre << " | Длительность: " << duration 
+              << " мин. | Возраст: " << ageRestriction << "+" << std::endl;
 }

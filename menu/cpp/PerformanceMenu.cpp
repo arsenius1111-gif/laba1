@@ -1,68 +1,70 @@
-#include "../header/PerformanceMenu.h"
-#include "../header/MainMenu.h"
+#include "PerformanceMenu.h"
 #include <iostream>
-
-using namespace std;
-
-void handlePerformanceAction(Hall* selectedHall, int choice) {
-    if (!selectedHall || selectedHall->getPerformanceCount() == 0) {
-        cout << "В зале нет спектаклей.\n";
-        return;
+#include <limits>
+#include <string>
+Performance createPerformanceFromInput() {
+    std::string title;
+    std::string director;
+    std::string genre;
+    int duration = 0;
+    int age = 0;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cout << "Введите название спектакля: ";
+    std::getline(std::cin, title);
+    std::cout << "Введите режиссера: ";
+    std::getline(std::cin, director);
+    std::cout << "Введите жанр: ";
+    std::getline(std::cin, genre);
+    std::cout << "Введите длительность (мин): ";
+    while (!(std::cin >> duration) || duration <= 0) {
+        std::cout << "Ошибка ввода! Введите число больше 0: ";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
-
-    selectedHall->printPerformances();
-    int index = inputInt("\nВведите номер спектакля: ");
-
-    if (index < 1 || index > selectedHall->getPerformanceCount()) {
-        cout << "Ошибка! Неверный номер спектакля.\n";
-        return;
+    std::cout << "Введите возрастной ценз (0, 6, 12, 16, 18): ";
+    while (!(std::cin >> age) || age < 0) {
+        std::cout << "Ошибка ввода! Введите корректный возраст: ";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
-    index--;
-
-    if (choice == 3) {
-        int count = inputPositiveInt("Введите количество билетов: ");
-        selectedHall->sellTickets(index, count);
-    }
-    else if (choice == 4) {
-        cout << "\nЧто изменить?\n"
-             << "1. Название\n"
-             << "2. Режиссёр\n"
-             << "3. Жанр\n"
-             << "4. Продолжительность\n"
-             << "5. Возрастное ограничение\n";
-
-        int field = inputInt("Выберите характеристику: ");
-        switch (field) {
-            case 1: selectedHall->getPerformance(index).setTitle(inputString("Новое название: ")); break;
-            case 2: selectedHall->getPerformance(index).setDirector(inputString("Новый режиссёр: ")); break;
-            case 3: selectedHall->getPerformance(index).setGenre(inputString("Новый жанр: ")); break;
-            case 4: selectedHall->getPerformance(index).setDuration(inputPositiveInt("Новая продолжительность: ")); break;
-            case 5: selectedHall->getPerformance(index).setAgeLimit(inputPositiveInt("Новое возрастное ограничение: ")); break;
-            default: cout << "Ошибка! Неверный пункт.\n";
+    return Performance(title, director, genre, duration, age);
+}
+void runPerformanceMenu(Performance& performance) {
+    while (true) {
+        std::cout << "\n--- Редактирование спектакля ---" << std::endl;
+        std::cout << "1. Показать данные" << std::endl;
+        std::cout << "2. Изменить название" << std::endl;
+        std::cout << "3. Изменить длительность" << std::endl;
+        std::cout << "0. Назад в меню зала" << std::endl;
+        std::cout << "Выберите вариант: ";
+        int choice = 0;
+        if (!(std::cin >> choice)) {
+            std::cout << "Ошибка ввода! Введите число." << std::endl;
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            continue;
         }
-    }
-    else if (choice == 5) {
-        cout << "\nЧто вывести?\n"
-             << "1. Название\n"
-             << "2. Режиссёр\n"
-             << "3. Жанр\n"
-             << "4. Продолжительность\n"
-             << "5. Возрастное ограничение\n";
-
-        int field = inputInt("Выберите характеристику: ");
-        switch (field) {
-            case 1: cout << "Название: " << selectedHall->getPerformance(index).getTitle() << "\n"; break;
-            case 2: cout << "Режиссёр: " << selectedHall->getPerformance(index).getDirector() << "\n"; break;
-            case 3: cout << "Жанр: " << selectedHall->getPerformance(index).getGenre() << "\n"; break;
-            case 4: cout << "Продолжительность: " << selectedHall->getPerformance(index).getDuration() << " мин.\n"; break;
-            case 5: cout << "Возрастное ограничение: " << selectedHall->getPerformance(index).getAgeLimit() << "+\n"; break;
-            default: cout << "Ошибка! Неверный пункт.\n";
+        if (choice == 0) break;
+        if (choice == 1) {
+            performance.displayInfo();
+        } else if (choice == 2) {
+            std::cout << "Введите новое название: ";
+            std::string newTitle;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::getline(std::cin, newTitle);
+            performance.setTitle(newTitle);
+            std::cout << "Название изменено!" << std::endl;
+        } else if (choice == 3) {
+            std::cout << "Введите новую длительность (мин): ";
+            int newDur = 0;
+            if (std::cin >> newDur && newDur > 0) {
+                performance.setDuration(newDur);
+                std::cout << "Длительность изменена!" << std::endl;
+            } else {
+                std::cout << "Некорректная длительность!" << std::endl;
+            }
+        } else {
+            std::cout << "Неверный пункт!" << std::endl;
         }
-    }
-    else if (choice == 6) {
-        cout << "\n===== ПОЛНАЯ ИНФОРМАЦИЯ =====\n";
-        selectedHall->getPerformance(index).printInfo();
-        cout << "Продано билетов: " << selectedHall->getSoldTickets(index) << "\n"
-             << "Свободных мест: " << selectedHall->getCapacity() - selectedHall->getSoldTickets(index) << "\n";
     }
 }
