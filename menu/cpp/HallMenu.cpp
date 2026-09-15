@@ -2,53 +2,80 @@
 #include "PerformanceMenu.h"
 #include <iostream>
 #include <limits>
-void runHallMenu(Hall& hall) {
-    while (true) {
-        std::cout << "\n=== Управление Залом №" << hall.getNumber() << " ===" << std::endl;
-        std::cout << "1. Показать полную информацию" << std::endl;
-        std::cout << "2. Добавить новый спектакль (с проверкой лимита)" << std::endl;
-        std::cout << "3. Редактировать спектакль" << std::endl;
-        std::cout << "4. Изменить вместимость зала" << std::endl;
-        std::cout << "0. Назад в главное меню" << std::endl;
-        std::cout << "Выберите вариант: ";
-        int choice = 0;
-        if (!(std::cin >> choice)) {
-            std::cout << "Ошибка ввода! Введите число." << std::endl;
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            continue;
-        }
-        if (choice == 0) break;
-        if (choice == 1) {
+
+void displayHallMenu(const Hall* selectedHall) {
+    if (selectedHall != nullptr) {
+        selectedHall->displayFullInfo();
+    }
+}
+
+static void handleEditPerformance(Hall& hall) {
+    auto& list = hall.getPerformances();
+    if (list.empty()) {
+        std::cout << "В зале пока нет спектаклей!\n";
+        return;
+    }
+    hall.displayFullInfo();
+    std::cout << "Выберите номер спектакля: ";
+    if (int number = 0; std::cin >> number && number > 0 && static_cast<size_t>(number) <= list.size()) {
+        runPerformanceMenu(list[static_cast<size_t>(number) - 1]);
+    } else {
+        std::cout << "Неверный номер!\n";
+    }
+}
+
+static void handleSetCapacity(Hall& hall) {
+    std::cout << "Введите новую вместимость: ";
+    if (int newCap = 0; std::cin >> newCap && newCap > 0) {
+        hall.setCapacity(newCap);
+        std::cout << "Вместимость обновлена!\n";
+    } else {
+        std::cout << "Некорректная вместимость!\n";
+    }
+}
+
+static void handleMenuChoice(Hall& hall, int choice, bool& running) {
+    switch (choice) {
+        case 0:
+            running = false;
+            break;
+        case 1:
             hall.displayFullInfo();
-        } else if (choice == 2) {
+            break;
+        case 2: {
             Performance p = createPerformanceFromInput();
             hall.addPerformance(p);
-        } else if (choice == 3) {
-            auto& list = hall.getPerformances();
-            if (list.empty()) {
-                std::cout << "В зале пока нет спектаклей!" << std::endl;
-            } else {
-                hall.displayFullInfo();
-                std::cout << "Выберите номер спектакля для изменения: ";
-                size_t index = 0;
-                if (std::cin >> index && index > 0 && index <= list.size()) {
-                    runPerformanceMenu(list[index - 1]);
-                } else {
-                    std::cout << "Неверный номер!" << std::endl;
-                }
-            }
-        } else if (choice == 4) {
-            std::cout << "Введите новую вместимость: ";
-            int newCap = 0;
-            if (std::cin >> newCap && newCap > 0) {
-                hall.setCapacity(newCap);
-                std::cout << "Вместимость обновлена!" << std::endl;
-            } else {
-                std::cout << "Некорректная вместимость!" << std::endl;
-            }
+            break;
+        }
+        case 3:
+            handleEditPerformance(hall);
+            break;
+        case 4:
+            handleSetCapacity(hall);
+            break;
+        default:
+            std::cout << "Неверный вариант!\n";
+            break;
+    }
+}
+
+void runHallMenu(Hall& hall) {
+    bool running = true;
+    while (running) {
+        std::cout << "\n=== Управление Залом №" << hall.getNumber() << " ===\n"
+                  << "1. Показать полную информацию\n"
+                  << "2. Добавить новый спектакль\n"
+                  << "3. Редактировать спектакль\n"
+                  << "4. Изменить вместимость зала\n"
+                  << "0. Назад в главное меню\n"
+                  << "Выберите вариант: ";
+
+        if (int choice = 0; std::cin >> choice) {
+            handleMenuChoice(hall, choice, running);
         } else {
-            std::cout << "Неверный вариант!" << std::endl;
+            std::cout << "Ошибка ввода! Введите число.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
 }
