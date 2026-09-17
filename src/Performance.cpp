@@ -11,7 +11,7 @@ std::string Performance::getGenre() const { return genre; }
 int Performance::getDuration() const { return duration; }
 int Performance::getAgeRestriction() const { return ageRestriction; }
 
-void Performance::setTitle(const std::string& newTitle) {
+void Performance::setTitle(const std::string_view& newTitle) {
     if (!newTitle.empty()) {
         title = newTitle;
     }
