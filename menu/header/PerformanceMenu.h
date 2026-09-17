@@ -1,5 +1,6 @@
 #ifndef PERFORMANCEMENU_H
 #define PERFORMANCEMENU_H
-#include "../../include/Hall.h"
-void handlePerformanceAction(Hall* selectedHall, int choice);
-#endif
+#include "Performance.h"
+void runPerformanceMenu(Performance& performance);
+Performance createPerformanceFromInput();
+#endif 

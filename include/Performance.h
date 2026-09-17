@@ -15,5 +15,8 @@ public:
     std::string getGenre() const;
     int getDuration() const;
     int getAgeRestriction() const;
+    void setTitle(const std::string& newTitle);
+    void setDuration(int newDuration);
+    void displayInfo() const;
 };
 #endif 
