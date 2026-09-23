@@ -1,6 +1,6 @@
 #include "Hall.h"
 Hall::Hall(int number_, int capacity_) 
-    : number(number_), capacity(capacity_), ticketsSold(0) {}
+    : number(number_), capacity(capacity_) {}
 
 int Hall::getNumber() const { return number; }
 int Hall::getCapacity() const { return capacity; }

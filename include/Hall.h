@@ -7,7 +7,7 @@ class Hall {
 private:
     int number;
     int capacity;
-    int ticketsSold;
+    int ticketsSold = 0;
     std::vector<Performance> performances;
 public:
     Hall(int number_, int capacity_);
