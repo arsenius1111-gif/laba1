@@ -28,3 +28,21 @@ void Performance::displayInfo() const {
               << " | Жанр: " << genre << " | Длительность: " << duration 
               << " мин. | Возраст: " << ageRestriction << "+" << std::endl;
 }
+bool Performance::operator==(const Performance& other) const {
+    return this->title == other.title;  
+}
+bool Performance::operator!=(const Performance& other) const {
+    return !(*this == other);
+}
+bool Performance::operator<(const Performance& other) const {
+    return this->duration < other.duration; 
+}
+bool Performance::operator>(const Performance& other) const {
+    return other < *this;  
+}
+bool Performance::operator<=(const Performance& other) const {
+    return !(*this > other);   
+}
+bool Performance::operator>=(const Performance& other) const {
+    return !(*this < other);   
+}
