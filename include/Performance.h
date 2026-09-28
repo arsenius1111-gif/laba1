@@ -24,21 +24,14 @@ public:
 
     void displayInfo() const;
 
-    // --- C++20 / SONARQUBE BEST PRACTICES ---
-
-    // 1. Для == в C++20 operator!= генерируется автоматически
     bool operator==(const Performance& other) const;
-
-    // 2. Операторы отношения по длительности
     bool operator<(const Performance& other) const;
     bool operator>(const Performance& other) const;
     bool operator<=(const Performance& other) const;
     bool operator>=(const Performance& other) const;
-
-    // 3. Дружественная функция
+  
     friend void printPerformanceSecretDetails(const Performance& p);
 
-    // 4. Hidden Friend реализация для operator<< и operator>> (прямо в header!)
     friend std::ostream& operator<<(std::ostream& os, const Performance& p) {
         os << "Спектакль: \"" << p.title << "\" (" << p.genre << ", " 
            << p.duration << " мин, " << p.ageRestriction << "+)";
