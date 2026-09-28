@@ -30,23 +30,3 @@ void printPerformanceSecretDetails(const Performance& p) {
     std::cout << "\n[Дружественная функция]: Прямой доступ к private-полям!" << std::endl;
     std::cout << "Название: " << p.title << ", Длительность: " << p.duration << " мин.\n";
 }
-
-std::ostream& operator<<(std::ostream& os, const Performance& p) {
-    os << "Спектакль: \"" << p.title << "\" (" << p.genre << ", " 
-       << p.duration << " мин, " << p.ageRestriction << "+)";
-    return os;
-}
-
-std::istream& operator>>(std::istream& is, Performance& p) {
-    std::cout << "Введите название спектакля: ";
-    is >> p.title;
-    std::cout << "Введите режиссера: ";
-    is >> p.director;
-    std::cout << "Введите жанр: ";
-    is >> p.genre;
-    std::cout << "Введите длительность (мин): ";
-    is >> p.duration;
-    std::cout << "Введите возрастное ограничение: ";
-    is >> p.ageRestriction;
-    return is;
-}
