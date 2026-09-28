@@ -12,10 +12,14 @@ std::string Performance::getGenre() const { return genre; }
 int Performance::getDuration() const { return duration; }
 int Performance::getAgeRestriction() const { return ageRestriction; }
 
+void Performance::setTitle(const std::string& title_) { title = title_; }
+void Performance::setDirector(const std::string& director_) { director = director_; }
+void Performance::setGenre(const std::string& genre_) { genre = genre_; }
+void Performance::setDuration(int duration_) { duration = duration_; }
+void Performance::setAgeRestriction(int ageRestriction_) { ageRestriction = ageRestriction_; }
+
 void Performance::displayInfo() const {
-    std::cout << "Спектакль: \"" << title << "\" | Режиссер: " << director
-              << " | Жанр: " << genre << " | Длительность: " << duration
-              << " мин | Возраст: " << ageRestriction << "+" << std::endl;
+    std::cout << *this << std::endl;
 }
 
 bool Performance::operator==(const Performance& other) const {
@@ -27,6 +31,6 @@ std::strong_ordering Performance::operator<=>(const Performance& other) const {
 }
 
 void printPerformanceSecretDetails(const Performance& p) {
-    std::cout << "\n[Дружественная функция]: Прямой доступ к private-полям!" << std::endl;
-    std::cout << "Название: " << p.title << ", Длительность: " << p.duration << " мин.\n";
+    std::cout << "\n[Friend-функция]: Прямой доступ к private-полям спектакля:" << std::endl;
+    std::cout << "Название: " << p.title << " | Длительность: " << p.duration << " мин.\n";
 }

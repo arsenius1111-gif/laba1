@@ -1,31 +1,65 @@
 #include "MainMenu.h"
+#include "PerformanceMenu.h"
 #include "HallMenu.h"
 #include <iostream>
-#include <limits>
 
-void runApplication(Hall& hall1, Hall& hall2) {
+MainMenu::MainMenu() {
+    initDatabase();
+}
+
+void MainMenu::clearInput() {
+    std::cin.clear();
+    std::cin.ignore(10000, '\n');
+}
+
+void MainMenu::initDatabase() {
+    halls.emplace_back(1, 100);
+    halls.emplace_back(2, 50);
+
+    catalog.emplace_back("Гамлет", "Уильям Шекспир", "Трагедия", 150, 16);
+    catalog.emplace_back("Щелкунчик", "Пётр Чайковский", "Балет", 120, 6);
+    catalog.emplace_back("Ревизор", "Николай Гоголь", "Комедия", 140, 12);
+    catalog.emplace_back("Мастер и Маргарита", "Михаил Булгаков", "Драма", 180, 16);
+
+    halls[0] += catalog[0];
+    halls[0] += catalog[1];
+}
+
+void MainMenu::run() {
     while (true) {
-        std::cout << "\n=== ГЛАВНОЕ МЕНЮ СИСТЕМЫ ===" << std::endl;
-        std::cout << "1. Управление Залом №1" << std::endl;
-        std::cout << "2. Управление Залом №2" << std::endl;
-        std::cout << "0. Выход" << std::endl;
-        std::cout << "Выберите вариант: ";
+        std::cout << "\n==========================================" << std::endl;
+        std::cout << "       ГЛАВНОЕ МЕНЮ СИСТЕМЫ ТЕАТРА" << std::endl;
+        std::cout << "==========================================" << std::endl;
+        std::cout << "1. Просмотреть все спектакли в базе\n";
+        std::cout << "2. Управление залами и продажа билетов\n";
+        std::cout << "3. Сравнить спектакли из базы (==, <=>, <, >)\n";
+        std::cout << "4. Добавить новый спектакль в базу (operator>>)\n";
+        std::cout << "5. Создать новый зал\n";
+        std::cout << "0. Выход\n";
+        std::cout << "Выберите действие: ";
 
-        if (int sc = 0; std::cin >> sc) {
-            if (sc == 0) {
-                break;
-            }
-            if (sc == 1) {
-                runHallMenu(hall1);
-            } else if (sc == 2) {
-                runHallMenu(hall2);
-            } else {
-                std::cout << "Неверный вариант!" << std::endl;
-            }
+        int choice = 0;
+        if (!(std::cin >> choice)) {
+            clearInput();
+            std::cout << "Ошибка ввода!\n";
+            continue;
+        }
+
+        if (choice == 1) {
+            PerformanceMenu::showAll(catalog);
+        } else if (choice == 2) {
+            HallMenu::manage(halls, catalog);
+        } else if (choice == 3) {
+            PerformanceMenu::compare(catalog);
+        } else if (choice == 4) {
+            PerformanceMenu::create(catalog);
+        } else if (choice == 5) {
+            HallMenu::create(halls);
+        } else if (choice == 0) {
+            std::cout << "Завершение работы программы...\n";
+            break;
         } else {
-            std::cout << "Ошибка ввода! Введите число." << std::endl;
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Неверный пункт меню!\n";
         }
     }
 }

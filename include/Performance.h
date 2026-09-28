@@ -23,6 +23,12 @@ public:
     int getDuration() const;
     int getAgeRestriction() const;
 
+    void setTitle(const std::string& title_);
+    void setDirector(const std::string& director_);
+    void setGenre(const std::string& genre_);
+    void setDuration(int duration_);
+    void setAgeRestriction(int ageRestriction_);
+
     void displayInfo() const;
 
     bool operator==(const Performance& other) const;
@@ -31,19 +37,21 @@ public:
     friend void printPerformanceSecretDetails(const Performance& p);
 
     friend std::ostream& operator<<(std::ostream& os, const Performance& p) {
-        os << "Спектакль: \"" << p.title << "\" (" << p.genre << ", " 
-           << p.duration << " мин, " << p.ageRestriction << "+)";
+        os << "Спектакль: \"" << p.title << "\" | Режиссер: " << p.director 
+           << " | Жанр: " << p.genre << " | Длительность: " << p.duration 
+           << " мин | Возраст: " << p.ageRestriction << "+";
         return os;
     }
 
     friend std::istream& operator>>(std::istream& is, Performance& p) {
         std::cout << "Введите название спектакля: ";
-        is >> p.title;
+        is.ignore(10000, '\n');
+        std::getline(is, p.title);
         std::cout << "Введите режиссера: ";
-        is >> p.director;
+        std::getline(is, p.director);
         std::cout << "Введите жанр: ";
-        is >> p.genre;
-        std::cout << "Введите длительность (мин): ";
+        std::getline(is, p.genre);
+        std::cout << "Введите длительность (в минутах): ";
         is >> p.duration;
         std::cout << "Введите возрастное ограничение: ";
         is >> p.ageRestriction;

@@ -1,5 +1,16 @@
-#ifndef MAINMENU_H
-#define MAINMENU_H
+#ifndef MAIN_MENU_H
+#define MAIN_MENU_H
+#include <vector>
 #include "Hall.h"
-void runApplication(Hall& hall1, Hall& hall2);
-#endif 
+#include "Performance.h"
+class MainMenu {
+private:
+    std::vector<Hall> halls;
+    std::vector<Performance> catalog;
+    void initDatabase();
+    void clearInput();
+public:
+    MainMenu();
+    void run();
+};
+#endif

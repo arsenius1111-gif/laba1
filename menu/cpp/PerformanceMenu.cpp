@@ -1,98 +1,71 @@
 #include "PerformanceMenu.h"
 #include <iostream>
-#include <limits>
-#include <string>
 
-Performance createPerformanceFromInput() {
-    std::string title;
-    std::string director;
-    std::string genre;
-    int duration = 0;
-    int age = 0;
+void PerformanceMenu::showAll(const std::vector<Performance>& catalog) {
+    std::cout << "\n==========================================" << std::endl;
+    std::cout << "         КАТАЛОГ ВСЕХ СПЕКТАКЛЕЙ" << std::endl;
+    std::cout << "==========================================" << std::endl;
 
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-    std::cout << "Введите название спектакля: ";
-    std::getline(std::cin, title);
-
-    std::cout << "Введите режиссера: ";
-    std::getline(std::cin, director);
-
-    std::cout << "Введите жанр: ";
-    std::getline(std::cin, genre);
-
-    std::cout << "Введите длительность (мин): ";
-    while (!(std::cin >> duration) || duration <= 0) {
-        std::cout << "Ошибка ввода! Введите число больше 0: ";
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    if (catalog.empty()) {
+        std::cout << "Каталог спектаклей пуст.\n";
+        return;
     }
 
-    std::cout << "Введите возрастной ценз (0, 6, 12, 16, 18): ";
-    while (!(std::cin >> age) || age < 0) {
-        std::cout << "Ошибка ввода! Введите корректный возраст: ";
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    for (size_t i = 0; i < catalog.size(); ++i) {
+        std::cout << i + 1 << ". " << catalog[i] << "\n";
+    }
+    std::cout << "------------------------------------------\n";
+    std::cout << "Всего спектаклей в базе: " << catalog.size() << "\n";
+}
+
+void PerformanceMenu::create(std::vector<Performance>& catalog) {
+    std::cout << "\n--- Добавление нового спектакля (operator>>) ---" << std::endl;
+    Performance p;
+    std::cin >> p;
+    catalog.push_back(p);
+    std::cout << "[Успех]: Спектакль \"" << p.getTitle() << "\" добавлен в базу!\n";
+}
+
+void PerformanceMenu::compare(const std::vector<Performance>& catalog) {
+    if (catalog.size() < 2) {
+        std::cout << "\n[Ошибка]: В базе должно быть минимум 2 спектакля!\n";
+        return;
     }
 
-    return Performance(title, director, genre, duration, age);
-}
+    showAll(catalog);
 
-static void handleEditTitle(Performance& performance) {
-    std::cout << "Введите новое название: ";
-    std::string newTitle;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::getline(std::cin, newTitle);
-    performance.setTitle(newTitle);
-    std::cout << "Название изменено!\n";
-}
+    size_t i1 = 0;
+    size_t i2 = 0;
+    std::cout << "Выберите номер первого спектакля: ";
+    std::cin >> i1;
+    std::cout << "Выберите номер второго спектакля: ";
+    std::cin >> i2;
 
-static void handleEditDuration(Performance& performance) {
-    std::cout << "Введите новую длительность (мин): ";
-    if (int newDur = 0; std::cin >> newDur && newDur > 0) {
-        performance.setDuration(newDur);
-        std::cout << "Длительность изменена!\n";
+    if (i1 < 1 || i1 > catalog.size() || i2 < 1 || i2 > catalog.size()) {
+        std::cout << "Неверный выбор!\n";
+        return;
+    }
+
+    const auto& p1 = catalog[i1 - 1];
+    const auto& p2 = catalog[i2 - 1];
+
+    std::cout << "\n--- Результаты сравнения ---" << std::endl;
+
+    if (p1 == p2) {
+        std::cout << "[operator==]: Спектакли одинаковы по названию (\"" << p1.getTitle() << "\")\n";
     } else {
-        std::cout << "Некорректная длительность!\n";
+        std::cout << "[operator==]: Названия спектаклей отличаются.\n";
     }
-}
 
-static void handlePerformanceChoice(Performance& performance, int choice, bool& running) {
-    switch (choice) {
-        case 0:
-            running = false;
-            break;
-        case 1:
-            performance.displayInfo();
-            break;
-        case 2:
-            handleEditTitle(performance);
-            break;
-        case 3:
-            handleEditDuration(performance);
-            break;
-        default:
-            std::cout << "Неверный пункт!\n";
-            break;
+    if (p1 < p2) {
+        std::cout << "[operator<]: \"" << p1.getTitle() << "\" (" << p1.getDuration() 
+                  << " мин) короче, чем \"" << p2.getTitle() << "\" (" << p2.getDuration() << " мин)\n";
+    } else if (p1 > p2) {
+        std::cout << "[operator>]: \"" << p1.getTitle() << "\" (" << p1.getDuration() 
+                  << " мин) длиннее, чем \"" << p2.getTitle() << "\" (" << p2.getDuration() << " мин)\n";
+    } else {
+        std::cout << "[operator<=>]: Спектакли равны по длительности.\n";
     }
-}
 
-void runPerformanceMenu(Performance& performance) {
-    bool running = true;
-    while (running) {
-        std::cout << "\n--- Редактирование спектакля ---\n"
-                  << "1. Показать данные\n"
-                  << "2. Изменить название\n"
-                  << "3. Изменить длительность\n"
-                  << "0. Назад в меню зала\n"
-                  << "Выберите вариант: ";
-
-        if (int choice = 0; std::cin >> choice) {
-            handlePerformanceChoice(performance, choice, running);
-        } else {
-            std::cout << "Ошибка ввода! Введите число.\n";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
-    }
+    printPerformanceSecretDetails(p1);
 }
