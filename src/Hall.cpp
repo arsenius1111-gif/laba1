@@ -1,4 +1,6 @@
 #include "Hall.h"
+#include <algorithm>
+
 Hall::Hall(int number_, int capacity_) 
     : number(number_), capacity(capacity_) {}
 
@@ -32,19 +34,9 @@ bool Hall::sellTickets(int count) {
 }
 
 bool Hall::addPerformance(const Performance& p) {
-    int totalDuration = 0;
-    for (const auto& existing : performances) {
-        totalDuration += existing.getDuration();
-    }
-
-    if (totalDuration + p.getDuration() > 480) {
-        std::cout << "\n[Ошибка ограничения]: Нельзя добавить \"" << p.getTitle() 
-                  << "\". Превышен дневной лимит времени зала (480 мин)!\n";
-        return false;
-    }
-
-    performances.push_back(p);
-    return true;
+    size_t initialCount = performances.size();
+    *this += p;
+    return performances.size() > initialCount;
 }
 
 const std::vector<Performance>& Hall::getPerformances() const { return performances; }
@@ -62,8 +54,52 @@ void Hall::displayFullInfo() const {
     } else {
         std::cout << "Репертуар зала:" << std::endl;
         for (size_t i = 0; i < performances.size(); ++i) {
-            std::cout << i + 1 << ". ";
-            performances[i].displayInfo();
+            std::cout << i + 1 << ". " << performances[i] << std::endl;
         }
     }
+}
+
+Hall& Hall::operator+=(const Performance& p) {
+    int totalDuration = 0;
+    for (const auto& existing : performances) {
+        totalDuration += existing.getDuration();
+    }
+
+    if (totalDuration + p.getDuration() > 480) {
+        std::cout << "\n[Ошибка +=]: Нельзя добавить \"" << p.getTitle() 
+                  << "\". Превышен дневной лимит времени зала (480 мин)!\n"
+                  << "Текущая суммарная длительность: " << totalDuration 
+                  << " мин, пытаемся добавить: " << p.getDuration() << " мин.\n";
+        return *this;
+    }
+
+    performances.push_back(p);
+    std::cout << "\n[Успех +=]: Спектакль \"" << p.getTitle() << "\" успешно добавлен в Зал №" << number << "!\n";
+    return *this;
+}
+
+Hall& Hall::operator-=(const Performance& p) {
+    auto it = std::find(performances.begin(), performances.end(), p);
+
+    if (it != performances.end()) {
+        performances.erase(it);
+        std::cout << "\n[Успех -=]: Спектакль \"" << p.getTitle() << "\" удален из Зала №" << number << ".\n";
+    } else {
+        std::cout << "\n[Ошибка -=]: Спектакль \"" << p.getTitle() << "\" не найден в Зале №" << number << "!\n";
+    }
+
+    return *this;
+}
+
+void printHallAnalytics(const Hall& hall) {
+    std::cout << "\n===== АНАЛИТИКА ЗАЛА №" << hall.number << " (через friend) =====" << std::endl;
+    std::cout << "Загрузка зала: " << (hall.capacity > 0 ? (hall.ticketsSold * 100.0 / hall.capacity) : 0.0) << "%\n";
+    std::cout << "Количество репертуарных спектаклей: " << hall.performances.size() << std::endl;
+    
+    int totalMinutes = 0;
+    for (const auto& p : hall.performances) {
+        totalMinutes += p.getDuration();
+    }
+    std::cout << "Общая продолжительность всех спектаклей: " << totalMinutes << " / 480 мин.\n";
+    std::cout << "========================================================\n";
 }

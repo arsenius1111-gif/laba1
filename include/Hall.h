@@ -20,5 +20,8 @@ public:
     std::vector<Performance>& getPerformances();
     const std::vector<Performance>& getPerformances() const;
     void displayFullInfo() const;
+    Hall& operator+=(const Performance& p);
+    Hall& operator-=(const Performance& p);
+    friend void printHallAnalytics(const Hall& hall);
 };
 #endif 

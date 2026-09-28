@@ -66,4 +66,4 @@ std::istream& operator>>(std::istream& is, Performance& p) {
     std::cout << "Введите возрастное ограничение: ";
     is >> p.ageRestriction;
     return is;
-}
+}   
