@@ -9,10 +9,10 @@ void runLab1() {
     std::cout << "==========================================\n" << std::endl;
 
     std::vector<Hall> halls;
-    halls.push_back(Hall(1, 100));
-    halls.push_back(Hall(2, 50));
+    // Исправление SonarQube: emplace_back вместо push_back
+    halls.emplace_back(1, 100);
+    halls.emplace_back(2, 50);
 
-    // Создаем объекты спектаклей
     Performance p1("Гамлет", "Шекспир", "Трагедия", 150, 16);
     Performance p2("Щелкунчик", "Чайковский", "Балет", 120, 6);
 
