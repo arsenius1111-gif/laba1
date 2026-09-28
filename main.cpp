@@ -9,7 +9,6 @@ void runLab1() {
     std::cout << "==========================================\n" << std::endl;
 
     std::vector<Hall> halls;
-    // Исправление SonarQube: emplace_back вместо push_back
     halls.emplace_back(1, 100);
     halls.emplace_back(2, 50);
 
@@ -45,10 +44,9 @@ void runLab2() {
     std::cout << p1 << std::endl;
     std::cout << p2 << std::endl;
 
-    std::cout << "\n2. Перегрузка операторов сравнения (== и <):" << std::endl;
-    Performance p1_copy("Гамлет", "Неизвестен", "Драма", 100, 12);
+    std::cout << "\n2. Перегрузка операторов сравнения (== и <=>):" << std::endl;
 
-    if (p1 == p1_copy) {
+    if (Performance p1_copy("Гамлет", "Неизвестен", "Драма", 100, 12); p1 == p1_copy) {
         std::cout << "[==] Спектакли равны по названию: \"" << p1.getTitle() << "\"" << std::endl;
     }
 

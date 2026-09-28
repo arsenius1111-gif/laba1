@@ -1,9 +1,9 @@
 #include "Performance.h"
 
 Performance::Performance()
-    : title(""), director(""), genre(""), duration(0), ageRestriction(0) {}
+    : title(""), director(""), genre("") {}
 
-Performance::Performance(std::string title_, std::string director_, std::string genre_, int duration_, int ageRestriction_)
+Performance::Performance(const std::string& title_, const std::string& director_, const std::string& genre_, int duration_, int ageRestriction_)
     : title(title_), director(director_), genre(genre_), duration(duration_), ageRestriction(ageRestriction_) {}
 
 std::string Performance::getTitle() const { return title; }
@@ -24,18 +24,6 @@ bool Performance::operator==(const Performance& other) const {
 
 bool Performance::operator<(const Performance& other) const {
     return this->duration < other.duration;
-}
-
-bool Performance::operator>(const Performance& other) const {
-    return other < *this;
-}
-
-bool Performance::operator<=(const Performance& other) const {
-    return !(*this > other);
-}
-
-bool Performance::operator>=(const Performance& other) const {
-    return !(*this < other);
 }
 
 void printPerformanceSecretDetails(const Performance& p) {

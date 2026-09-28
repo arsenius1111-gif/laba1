@@ -80,7 +80,6 @@ Hall& Hall::operator+=(const Performance& p) {
 
 Hall& Hall::operator-=(const Performance& p) {
     auto it = std::find(performances.begin(), performances.end(), p);
-
     if (it != performances.end()) {
         performances.erase(it);
         std::cout << "\n[Успех -=]: Спектакль \"" << p.getTitle() << "\" удален из Зала №" << number << ".\n";
