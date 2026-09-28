@@ -25,7 +25,11 @@ public:
     void displayInfo() const;
 
     bool operator==(const Performance& other) const;
+    bool operator!=(const Performance& other) const;
     bool operator<(const Performance& other) const;
+    bool operator>(const Performance& other) const;
+    bool operator<=(const Performance& other) const;
+    bool operator>=(const Performance& other) const;
 
     friend void printPerformanceSecretDetails(const Performance& p);
 

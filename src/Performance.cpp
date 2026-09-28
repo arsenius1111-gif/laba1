@@ -22,8 +22,24 @@ bool Performance::operator==(const Performance& other) const {
     return this->title == other.title;
 }
 
+bool Performance::operator!=(const Performance& other) const {
+    return !(*this == other);
+}
+
 bool Performance::operator<(const Performance& other) const {
     return this->duration < other.duration;
+}
+
+bool Performance::operator>(const Performance& other) const {
+    return other < *this;
+}
+
+bool Performance::operator<=(const Performance& other) const {
+    return !(*this > other);
+}
+
+bool Performance::operator>=(const Performance& other) const {
+    return !(*this < other);
 }
 
 void printPerformanceSecretDetails(const Performance& p) {

@@ -1,5 +1,4 @@
 #include "Hall.h"
-#include <algorithm>
 
 Hall::Hall(int number_, int capacity_) 
     : number(number_), capacity(capacity_) {}
@@ -79,11 +78,17 @@ Hall& Hall::operator+=(const Performance& p) {
 }
 
 Hall& Hall::operator-=(const Performance& p) {
-    auto it = std::find(performances.begin(), performances.end(), p);
-    if (it != performances.end()) {
-        performances.erase(it);
-        std::cout << "\n[Успех -=]: Спектакль \"" << p.getTitle() << "\" удален из Зала №" << number << ".\n";
-    } else {
+    bool found = false;
+    for (auto it = performances.begin(); it != performances.end(); ++it) {
+        if (*it == p) {
+            performances.erase(it);
+            std::cout << "\n[Успех -=]: Спектакль \"" << p.getTitle() << "\" удален из Зала №" << number << ".\n";
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
         std::cout << "\n[Ошибка -=]: Спектакль \"" << p.getTitle() << "\" не найден в Зале №" << number << "!\n";
     }
 
