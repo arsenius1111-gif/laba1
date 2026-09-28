@@ -44,15 +44,21 @@ void runLab2() {
     std::cout << p1 << std::endl;
     std::cout << p2 << std::endl;
 
-    std::cout << "\n2. Перегрузка операторов сравнения (== и <=>):" << std::endl;
+    std::cout << "\n2. Перегрузка операторов сравнения (==, <, >):" << std::endl;
 
-    if (Performance p1_copy("Гамлет", "Неизвестен", "Драма", 100, 12); p1 == p1_copy) {
+    Performance p1_copy("Гамлет", "Неизвестен", "Драма", 100, 12);
+    if (p1 == p1_copy) {
         std::cout << "[==] Спектакли равны по названию: \"" << p1.getTitle() << "\"" << std::endl;
     }
 
     if (p2 < p1) {
         std::cout << "[<] \"" << p2.getTitle() << "\" (" << p2.getDuration() 
                   << " мин) короче, чем \"" << p1.getTitle() << "\" (" << p1.getDuration() << " мин)" << std::endl;
+    }
+
+    if (p3 > p1) {
+        std::cout << "[>] \"" << p3.getTitle() << "\" (" << p3.getDuration() 
+                  << " мин) длиннее, чем \"" << p1.getTitle() << "\" (" << p1.getDuration() << " мин)" << std::endl;
     }
 
     std::cout << "\n3. Вызов дружественных функций (friend):" << std::endl;
