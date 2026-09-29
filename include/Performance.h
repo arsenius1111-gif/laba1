@@ -2,6 +2,7 @@
 #define PERFORMANCE_H
 
 #include <string>
+#include <string_view>
 #include <iostream>
 #include <compare>
 
@@ -15,7 +16,14 @@ private:
 
 public:
     Performance();
-    Performance(const std::string& title_, const std::string& director_, const std::string& genre_, int duration_, int ageRestriction_);
+
+    Performance(
+        std::string_view title_,
+        std::string_view director_,
+        std::string_view genre_,
+        int duration_,
+        int ageRestriction_
+    );
 
     std::string getTitle() const;
     std::string getDirector() const;
@@ -23,9 +31,9 @@ public:
     int getDuration() const;
     int getAgeRestriction() const;
 
-    void setTitle(const std::string& title_);
-    void setDirector(const std::string& director_);
-    void setGenre(const std::string& genre_);
+    void setTitle(std::string_view title_);
+    void setDirector(std::string_view director_);
+    void setGenre(std::string_view genre_);
     void setDuration(int duration_);
     void setAgeRestriction(int ageRestriction_);
 
@@ -37,8 +45,10 @@ public:
     friend void printPerformanceSecretDetails(const Performance& p);
 
     friend std::ostream& operator<<(std::ostream& os, const Performance& p) {
-        os << "Спектакль: \"" << p.title << "\" | Режиссер: " << p.director 
-           << " | Жанр: " << p.genre << " | Длительность: " << p.duration 
+        os << "Спектакль: \"" << p.title
+           << "\" | Режиссер: " << p.director
+           << " | Жанр: " << p.genre
+           << " | Длительность: " << p.duration
            << " мин | Возраст: " << p.ageRestriction << "+";
         return os;
     }
@@ -47,14 +57,19 @@ public:
         std::cout << "Введите название спектакля: ";
         is.ignore(10000, '\n');
         std::getline(is, p.title);
+
         std::cout << "Введите режиссера: ";
         std::getline(is, p.director);
+
         std::cout << "Введите жанр: ";
         std::getline(is, p.genre);
+
         std::cout << "Введите длительность (в минутах): ";
         is >> p.duration;
+
         std::cout << "Введите возрастное ограничение: ";
         is >> p.ageRestriction;
+
         return is;
     }
 };

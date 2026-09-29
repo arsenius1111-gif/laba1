@@ -7,7 +7,7 @@ MainMenu::MainMenu() {
     initDatabase();
 }
 
-void MainMenu::clearInput() {
+void MainMenu::clearInput() const {
     std::cin.clear();
     std::cin.ignore(10000, '\n');
 }
@@ -26,7 +26,9 @@ void MainMenu::initDatabase() {
 }
 
 void MainMenu::run() {
-    while (true) {
+    bool running = true;
+
+    while (running) {
         std::cout << "\n==========================================" << std::endl;
         std::cout << "       ГЛАВНОЕ МЕНЮ СИСТЕМЫ ТЕАТРА" << std::endl;
         std::cout << "==========================================" << std::endl;
@@ -39,6 +41,7 @@ void MainMenu::run() {
         std::cout << "Выберите действие: ";
 
         int choice = 0;
+
         if (!(std::cin >> choice)) {
             clearInput();
             std::cout << "Ошибка ввода!\n";
@@ -57,7 +60,7 @@ void MainMenu::run() {
             HallMenu::create(halls);
         } else if (choice == 0) {
             std::cout << "Завершение работы программы...\n";
-            break;
+            running = false;
         } else {
             std::cout << "Неверный пункт меню!\n";
         }
