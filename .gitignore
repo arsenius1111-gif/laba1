@@ -1,2 +1,40 @@
-program.exe
-.vscode
+# Visual Studio Code
+.vscode/
+
+# Executable files
+*.exe
+*.out
+
+# Object files
+*.o
+*.obj
+
+# Debug and Release
+Debug/
+Release/
+x64/
+x86/
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Temporary files
+*.tmp
+*.log
+
+# Program output
+*.pdb
+
+# OS files
+.DS_Store
+Thumbs.db
