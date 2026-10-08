@@ -1,4 +1,7 @@
 #include "PerformanceMenu.h"
+#include "Ballet.h"
+#include "Opera.h"
+#include "Musical.h"
 #include <iostream>
 
 void PerformanceMenu::showAll(const std::vector<Performance>& catalog) {
@@ -68,4 +71,71 @@ void PerformanceMenu::compare(const std::vector<Performance>& catalog) {
     }
 
     printPerformanceSecretDetails(p1);
+}
+void PerformanceMenu::showInheritanceDemo() {
+    Performance performance(
+        "Гамлет",
+        "Уильям Шекспир",
+        "Трагедия",
+        150,
+        16
+    );
+
+    Ballet ballet(
+        "Лебединое озеро",
+        "Мариус Петипа",
+        140,
+        6,
+        24,
+        4,
+        60
+    );
+
+    Opera opera(
+        "Евгений Онегин",
+        "Константин Сергеев",
+        160,
+        12,
+        "Баритон",
+        35,
+        3
+    );
+
+    Musical musical(
+        "Чикаго",
+        "Боб Фосси",
+        150,
+        16,
+        12,
+        8,
+        true
+    );
+
+    std::cout << "\n========== НАСЛЕДОВАНИЕ ==========\n";
+
+    std::cout << "\n--- Базовый класс Performance ---\n";
+    performance.displayInfo();
+
+    std::cout << "\n--- Производный класс Ballet ---\n";
+    ballet.displayBalletInfo();
+
+    std::cout << "\n--- Производный класс Opera ---\n";
+    opera.displayOperaInfo();
+
+    std::cout << "\n--- Производный класс Musical ---\n";
+    musical.displayMusicalInfo();
+
+    std::cout << "\n--- Унаследованные методы ---\n";
+    std::cout << "Название балета: " << ballet.getTitle() << '\n';
+    std::cout << "Режиссер оперы: " << opera.getDirector() << '\n';
+    std::cout << "Длительность мюзикла: "
+              << musical.getDuration() << " мин.\n";
+
+    std::cout << "\n--- Специализированные методы ---\n";
+    std::cout << "Количество танцоров в балете: "
+              << ballet.getDancersCount() << '\n';
+    std::cout << "Размер хора в опере: "
+              << opera.getChorusSize() << '\n';
+    std::cout << "Музыкальных номеров в мюзикле: "
+              << musical.getMusicalNumbers() << '\n';
 }

@@ -37,6 +37,7 @@ void MainMenu::run() {
         std::cout << "3. Сравнить спектакли из базы (==, <=>, <, >)\n";
         std::cout << "4. Добавить новый спектакль в базу (operator>>)\n";
         std::cout << "5. Создать новый зал\n";
+        std::cout << "6. Демонстрация наследования\n";
         std::cout << "0. Выход\n";
         std::cout << "Выберите действие: ";
 
@@ -58,6 +59,8 @@ void MainMenu::run() {
             PerformanceMenu::create(catalog);
         } else if (choice == 5) {
             HallMenu::create(halls);
+        } else if (choice == 6){
+            PerformanceMenu::showInheritanceDemo();
         } else if (choice == 0) {
             std::cout << "Завершение работы программы...\n";
             running = false;
