@@ -69,7 +69,8 @@ std::strong_ordering Performance::operator<=>(const Performance& other) const {
 }
 
 void printPerformanceSecretDetails(const Performance& p) {
-    std::cout << "\n[Friend-функция]: Прямой доступ к private-полям спектакля:" << std::endl;
+    std::cout << "\n[Friend-функция]: Прямой доступ к private-полям спектакля:"
+              << std::endl;
     std::cout << "Название: " << p.title
               << " | Длительность: " << p.duration << " мин.\n";
 }
