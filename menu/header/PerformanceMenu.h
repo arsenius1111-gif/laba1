@@ -9,6 +9,7 @@ public:
     static void showAll(const std::vector<Performance>& catalog);
     static void create(std::vector<Performance>& catalog);
     static void compare(const std::vector<Performance>& catalog);
+    static void showInheritanceDemo();
 };
 
 #endif
