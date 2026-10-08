@@ -7,7 +7,7 @@
 #include <compare>
 
 class Performance {
-private:
+protected:
     std::string title;
     std::string director;
     std::string genre;

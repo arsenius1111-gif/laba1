@@ -11,7 +11,7 @@ void Hall::setNumber(int number_) { number = number_; }
 
 void Hall::setCapacity(int newCapacity) {
     if (newCapacity >= ticketsSold) {
-        capacity = newCapacity;
+        capacity = newCapacity;  
         std::cout << "[Успех]: Новая вместимость установлена: " << capacity << std::endl;
     } else {
         std::cout << "[Ошибка]: Вместимость не может быть меньше проданных билетов (" << ticketsSold << ")!\n";
