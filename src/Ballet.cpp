@@ -45,3 +45,10 @@ void Ballet::displayBalletInfo() const {
     std::cout << "Количество актов: " << actsCount << '\n';
     std::cout << "Размер оркестра: " << orchestraSize << '\n';
 }
+
+void Ballet::performDance() const {
+    std::cout << "\n Танцевальная часть баллета ----\n";
+    std::cout << "Спектакль: " << getTitle() << '\n';
+    std::cout << "Колличество танцоров: " << dancersCount << '\n';
+    std::cout << "Колличество актов: " << actsCount << '\n';
+}

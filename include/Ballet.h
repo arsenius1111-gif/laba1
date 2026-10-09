@@ -29,6 +29,8 @@ public:
     void setOrchestraSize(int value);
 
     void displayBalletInfo() const;
+
+    void performDance() const;
 };
 
 #endif
