@@ -73,7 +73,7 @@ void PerformanceMenu::compare(const std::vector<Performance>& catalog) {
     printPerformanceSecretDetails(p1);
 }
 void PerformanceMenu::showInheritanceDemo() {
-    Performance performance(
+     Performance performance(
         "Гамлет",
         "Уильям Шекспир",
         "Трагедия",
@@ -111,31 +111,67 @@ void PerformanceMenu::showInheritanceDemo() {
         true
     );
 
-    std::cout << "\n========== НАСЛЕДОВАНИЕ ==========\n";
+    std::cout << "\n========== ДЕМОНСТРАЦИЯ НАСЛЕДОВАНИЯ ==========\n";
 
-    std::cout << "\n--- Базовый класс Performance ---\n";
+    std::cout << "\n--- 1. Базовый класс Performance ---\n";
     performance.displayInfo();
 
-    std::cout << "\n--- Производный класс Ballet ---\n";
+    std::cout << "\n--- 2. Производный класс Ballet ---\n";
     ballet.displayBalletInfo();
 
-    std::cout << "\n--- Производный класс Opera ---\n";
+    std::cout << "\n--- 3. Производный класс Opera ---\n";
     opera.displayOperaInfo();
 
-    std::cout << "\n--- Производный класс Musical ---\n";
+    std::cout << "\n--- 4. Производный класс Musical ---\n";
     musical.displayMusicalInfo();
 
-    std::cout << "\n--- Унаследованные методы ---\n";
-    std::cout << "Название балета: " << ballet.getTitle() << '\n';
-    std::cout << "Режиссер оперы: " << opera.getDirector() << '\n';
-    std::cout << "Длительность мюзикла: "
-              << musical.getDuration() << " мин.\n";
+    std::cout << "\n--- 5. Общие унаследованные поля ---\n";
 
-    std::cout << "\n--- Специализированные методы ---\n";
-    std::cout << "Количество танцоров в балете: "
+    std::cout << "\nПоля класса Performance, доступные объекту Ballet:\n";
+    std::cout << "Название: " << ballet.getTitle() << '\n';
+    std::cout << "Режиссер: " << ballet.getDirector() << '\n';
+    std::cout << "Жанр: " << ballet.getGenre() << '\n';
+    std::cout << "Длительность: " << ballet.getDuration() << " мин.\n";
+    std::cout << "Возрастное ограничение: "
+              << ballet.getAgeRestriction() << "+\n";
+
+    std::cout << "\nПоля класса Performance, доступные объекту Opera:\n";
+    std::cout << "Название: " << opera.getTitle() << '\n';
+    std::cout << "Режиссер: " << opera.getDirector() << '\n';
+    std::cout << "Жанр: " << opera.getGenre() << '\n';
+    std::cout << "Длительность: " << opera.getDuration() << " мин.\n";
+    std::cout << "Возрастное ограничение: "
+              << opera.getAgeRestriction() << "+\n";
+
+    std::cout << "\nПоля класса Performance, доступные объекту Musical:\n";
+    std::cout << "Название: " << musical.getTitle() << '\n';
+    std::cout << "Режиссер: " << musical.getDirector() << '\n';
+    std::cout << "Жанр: " << musical.getGenre() << '\n';
+    std::cout << "Длительность: " << musical.getDuration() << " мин.\n";
+    std::cout << "Возрастное ограничение: "
+              << musical.getAgeRestriction() << "+\n";
+
+    std::cout << "\n--- 6. Унаследованные сеттеры ---\n";
+    std::cout << "Название балета до изменения: "
+              << ballet.getTitle() << '\n';
+
+    ballet.setTitle("Лебединое озеро — обновленная версия");
+
+    std::cout << "Название балета после вызова setTitle(): "
+              << ballet.getTitle() << '\n';
+
+    std::cout << "\n--- 7. Унаследованные и собственные методы ---\n";
+    std::cout << "Геттер базового класса getDirector(): "
+              << ballet.getDirector() << '\n';
+
+    std::cout << "Геттер производного класса getDancersCount(): "
               << ballet.getDancersCount() << '\n';
-    std::cout << "Размер хора в опере: "
+
+    std::cout << "Геттер производного класса getChorusSize(): "
               << opera.getChorusSize() << '\n';
-    std::cout << "Музыкальных номеров в мюзикле: "
+
+    std::cout << "Геттер производного класса getMusicalNumbers(): "
               << musical.getMusicalNumbers() << '\n';
+
+    std::cout << "\n========== КОНЕЦ ДЕМОНСТРАЦИИ ==========\n";
 }
