@@ -1,5 +1,4 @@
 #include "Performance.h"
-#include <limits>
 
 Performance::Performance()
     : title(""), director(""), genre("") {}
@@ -7,8 +6,11 @@ Performance::Performance()
 Performance::Performance(std::string_view title_,
     std::string_view director_, std::string_view genre_,
     int duration_, int ageRestriction_)
-    : title(title_), director(director_), genre(genre_),
-      duration(duration_), ageRestriction(ageRestriction_) {}
+    : title(title_),
+      director(director_),
+      genre(genre_),
+      duration(duration_),
+      ageRestriction(ageRestriction_) {}
 
 std::string Performance::getTitle() const {
     return title;
@@ -81,52 +83,4 @@ void printPerformanceSecretDetails(const Performance& p) {
     std::cout << "Название: " << p.title << '\n';
     std::cout << "Режиссёр: " << p.director << '\n';
     std::cout << "Длительность: " << p.duration << " мин.\n";
-}
-
-std::ostream& operator<<(std::ostream& os, const Performance& p) {
-    os << "Спектакль: " << p.title << '\n'
-       << "Режиссёр: " << p.director << '\n'
-       << "Жанр: " << p.genre << '\n'
-       << "Длительность: " << p.duration << " мин.\n"
-       << "Возрастное ограничение: " << p.ageRestriction << "+\n";
-
-    return os;
-}
-
-std::istream& operator>>(std::istream& is, Performance& p) {
-    std::string title;
-    std::string director;
-    std::string genre;
-    int duration = 0;
-    int ageRestriction = 0;
-
-    std::cout << "Введите название спектакля: ";
-    is >> std::ws;
-    std::getline(is, title);
-
-    std::cout << "Введите режиссёра: ";
-    std::getline(is, director);
-
-    std::cout << "Введите жанр: ";
-    std::getline(is, genre);
-
-    std::cout << "Введите длительность в минутах: ";
-    if (!(is >> duration) || duration <= 0) {
-        is.setstate(std::ios::failbit);
-        return is;
-    }
-
-    std::cout << "Введите возрастное ограничение: ";
-    if (!(is >> ageRestriction) || ageRestriction < 0) {
-        is.setstate(std::ios::failbit);
-        return is;
-    }
-
-    p.title = title;
-    p.director = director;
-    p.genre = genre;
-    p.duration = duration;
-    p.ageRestriction = ageRestriction;
-
-    return is;
 }

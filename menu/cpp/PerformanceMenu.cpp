@@ -4,6 +4,130 @@
 #include "Opera.h"
 #include <iostream>
 #include <limits>
+#include <string>
+
+namespace {
+    bool readChoice(int& choice) {
+        if (std::cin >> choice) {
+            return true;
+        }
+
+        std::cin.clear();
+        std::cin.ignore(
+            std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Ошибка ввода. Введите число.\n";
+        return false;
+    }
+
+    void changeTitle(Performance& performance) {
+        std::string title;
+
+        std::cout << "Введите новое название: ";
+        std::cin >> std::ws;
+        std::getline(std::cin, title);
+
+        if (title.empty()) {
+            std::cout << "Название не может быть пустым.\n";
+            return;
+        }
+
+        performance.setTitle(title);
+        std::cout << "Название изменено.\n";
+    }
+
+    void showBallet() {
+        Ballet ballet(
+            "Лебединое озеро", "Мариус Петипа", 140, 6, 24);
+
+        bool running = true;
+
+        while (running) {
+            std::cout << "\n========== БАЛЕТ ==========\n";
+            ballet.displayBalletInfo();
+            ballet.performDance();
+
+            int choice = -1;
+            std::cout << "\n1. Изменить название\n0. Назад\n";
+
+            if (!readChoice(choice)) {
+                continue;
+            }
+
+            switch (choice) {
+            case 1:
+                changeTitle(ballet);
+                break;
+            case 0:
+                running = false;
+                break;
+            default:
+                std::cout << "Такого пункта меню нет.\n";
+            }
+        }
+    }
+
+    void showOpera() {
+        Opera opera(
+            "Евгений Онегин", "Константин Сергеев", 160, 12, true);
+
+        bool running = true;
+
+        while (running) {
+            std::cout << "\n========== ОПЕРА ==========\n";
+            opera.displayOperaInfo();
+            opera.performVocal();
+
+            int choice = -1;
+            std::cout << "\n1. Изменить название\n0. Назад\n";
+
+            if (!readChoice(choice)) {
+                continue;
+            }
+
+            switch (choice) {
+            case 1:
+                changeTitle(opera);
+                break;
+            case 0:
+                running = false;
+                break;
+            default:
+                std::cout << "Такого пункта меню нет.\n";
+            }
+        }
+    }
+
+    void showMusical() {
+        Musical musical(
+            "Чикаго", "Боб Фосси", 150, 16, true);
+
+        bool running = true;
+
+        while (running) {
+            std::cout << "\n========== МЮЗИКЛ ==========\n";
+            musical.displayMusicalInfo();
+            musical.performMusicalNumber();
+
+            int choice = -1;
+            std::cout << "\n1. Изменить название\n0. Назад\n";
+
+            if (!readChoice(choice)) {
+                continue;
+            }
+
+            switch (choice) {
+            case 1:
+                changeTitle(musical);
+                break;
+            case 0:
+                running = false;
+                break;
+            default:
+                std::cout << "Такого пункта меню нет.\n";
+            }
+        }
+    }
+}
 
 void PerformanceMenu::showAll(
     const std::vector<Performance>& catalog) {
@@ -50,31 +174,27 @@ void PerformanceMenu::compare(
     int i2 = 0;
 
     std::cout << "\nВведите номер первого спектакля: ";
-    if (!(std::cin >> i1)) {
-        std::cin.clear();
-        std::cin.ignore(
-            std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Ошибка ввода.\n";
+
+    if (!readChoice(i1)) {
         return;
     }
 
     std::cout << "Введите номер второго спектакля: ";
-    if (!(std::cin >> i2)) {
-        std::cin.clear();
-        std::cin.ignore(
-            std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Ошибка ввода.\n";
+
+    if (!readChoice(i2)) {
         return;
     }
 
-    if (i1 < 1 || i1 > static_cast<int>(catalog.size()) ||
+    if (i1 < 1 || i1 > static_cast<int>(catalog.size()) || 
         i2 < 1 || i2 > static_cast<int>(catalog.size())) {
         std::cout << "Указан неверный номер спектакля.\n";
         return;
     }
 
-    const Performance& first = catalog[static_cast<std::size_t>(i1 - 1)];
-    const Performance& second = catalog[static_cast<std::size_t>(i2 - 1)];
+    const Performance& first =
+        catalog[static_cast<std::size_t>(i1 - 1)];
+    const Performance& second =
+        catalog[static_cast<std::size_t>(i2 - 1)];
 
     std::cout << "\nРезультат сравнения:\n";
 
@@ -94,13 +214,6 @@ void PerformanceMenu::compare(
 }
 
 void PerformanceMenu::showInheritanceDemo() {
-    Ballet ballet(
-        "Лебединое озеро", "Мариус Петипа", 140, 6, 24);
-    Opera opera(
-        "Евгений Онегин", "Константин Сергеев", 160, 12, true);
-    Musical musical(
-        "Чикаго", "Боб Фосси", 150, 16, true);
-
     bool running = true;
 
     while (running) {
@@ -113,128 +226,24 @@ void PerformanceMenu::showInheritanceDemo() {
         std::cout << "0. Назад\n";
         std::cout << "Выберите тип спектакля: ";
 
-        if (!(std::cin >> choice)) {
-            std::cin.clear();
-            std::cin.ignore(
-                std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Ошибка ввода. Введите число.\n";
+        if (!readChoice(choice)) {
             continue;
         }
 
-        if (choice == 0) {
+        switch (choice) {
+        case 1:
+            showBallet();
+            break;
+        case 2:
+            showOpera();
+            break;
+        case 3:
+            showMusical();
+            break;
+        case 0:
             running = false;
-        } else if (choice == 1) {
-            bool editing = true;
-
-            while (editing) {
-                int action = -1;
-
-                std::cout << "\n========== БАЛЕТ ==========\n";
-                ballet.displayBalletInfo();
-                ballet.performDance();
-
-                std::cout << "\n1. Изменить название\n";
-                std::cout << "0. Назад\n";
-                std::cout << "Выберите действие: ";
-
-                if (!(std::cin >> action)) {
-                    std::cin.clear();
-                    std::cin.ignore(
-                        std::numeric_limits<std::streamsize>::max(), '\n');
-                    std::cout << "Ошибка ввода.\n";
-                    continue;
-                }
-
-                if (action == 1) {
-                    std::string title;
-
-                    std::cout << "Введите новое название: ";
-                    std::cin >> std::ws;
-                    std::getline(std::cin, title);
-
-                    ballet.setTitle(title);
-                    std::cout << "Название изменено.\n";
-                } else if (action == 0) {
-                    editing = false;
-                } else {
-                    std::cout << "Такого пункта меню нет.\n";
-                }
-            }
-        } else if (choice == 2) {
-            bool editing = true;
-
-            while (editing) {
-                int action = -1;
-
-                std::cout << "\n========== ОПЕРА ==========\n";
-                opera.displayOperaInfo();
-                opera.performVocal();
-
-                std::cout << "\n1. Изменить название\n";
-                std::cout << "0. Назад\n";
-                std::cout << "Выберите действие: ";
-
-                if (!(std::cin >> action)) {
-                    std::cin.clear();
-                    std::cin.ignore(
-                        std::numeric_limits<std::streamsize>::max(), '\n');
-                    std::cout << "Ошибка ввода.\n";
-                    continue;
-                }
-
-                if (action == 1) {
-                    std::string title;
-
-                    std::cout << "Введите новое название: ";
-                    std::cin >> std::ws;
-                    std::getline(std::cin, title);
-
-                    opera.setTitle(title);
-                    std::cout << "Название изменено.\n";
-                } else if (action == 0) {
-                    editing = false;
-                } else {
-                    std::cout << "Такого пункта меню нет.\n";
-                }
-            }
-        } else if (choice == 3) {
-            bool editing = true;
-
-            while (editing) {
-                int action = -1;
-
-                std::cout << "\n========== МЮЗИКЛ ==========\n";
-                musical.displayMusicalInfo();
-                musical.performMusicalNumber();
-
-                std::cout << "\n1. Изменить название\n";
-                std::cout << "0. Назад\n";
-                std::cout << "Выберите действие: ";
-
-                if (!(std::cin >> action)) {
-                    std::cin.clear();
-                    std::cin.ignore(
-                        std::numeric_limits<std::streamsize>::max(), '\n');
-                    std::cout << "Ошибка ввода.\n";
-                    continue;
-                }
-
-                if (action == 1) {
-                    std::string title;
-
-                    std::cout << "Введите новое название: ";
-                    std::cin >> std::ws;
-                    std::getline(std::cin, title);
-
-                    musical.setTitle(title);
-                    std::cout << "Название изменено.\n";
-                } else if (action == 0) {
-                    editing = false;
-                } else {
-                    std::cout << "Такого пункта меню нет.\n";
-                }
-            }
-        } else {
+            break;
+        default:
             std::cout << "Такого пункта меню нет.\n";
         }
     }

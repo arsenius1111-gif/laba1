@@ -1,6 +1,7 @@
 #include "Hall.h"
 #include <algorithm>
 #include <iostream>
+#include <ranges>
 
 Hall::Hall(int number_, int capacity_)
     : number(number_), capacity(capacity_) {}
@@ -69,7 +70,6 @@ void Hall::displayFullInfo() const {
     std::cout << "Вместимость: " << capacity << '\n';
     std::cout << "Продано билетов: " << ticketsSold << '\n';
     std::cout << "Свободных мест: " << capacity - ticketsSold << '\n';
-
     std::cout << "Репертуар:\n";
 
     if (performances.empty()) {
@@ -102,7 +102,7 @@ Hall& Hall::operator+=(const Performance& p) {
 }
 
 Hall& Hall::operator-=(const Performance& p) {
-    auto it = std::find(performances.begin(), performances.end(), p);
+    auto it = std::ranges::find(performances, p);
 
     if (it == performances.end()) {
         std::cout << "Такого спектакля нет в репертуаре.\n";
