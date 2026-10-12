@@ -1,10 +1,10 @@
 #ifndef PERFORMANCE_H
 #define PERFORMANCE_H
 
+#include <compare>
+#include <iostream>
 #include <string>
 #include <string_view>
-#include <iostream>
-#include <compare>
 
 class Performance {
 private:
@@ -16,14 +16,8 @@ private:
 
 public:
     Performance();
-
-    Performance(
-        std::string_view title_,
-        std::string_view director_,
-        std::string_view genre_,
-        int duration_,
-        int ageRestriction_
-    );
+    Performance(std::string_view title_, std::string_view director_,
+        std::string_view genre_, int duration_, int ageRestriction_);
 
     std::string getTitle() const;
     std::string getDirector() const;
@@ -43,35 +37,8 @@ public:
     std::strong_ordering operator<=>(const Performance& other) const;
 
     friend void printPerformanceSecretDetails(const Performance& p);
-
-    friend std::ostream& operator<<(std::ostream& os, const Performance& p) {
-        os << "Спектакль: \"" << p.title
-           << "\" | Режиссер: " << p.director
-           << " | Жанр: " << p.genre
-           << " | Длительность: " << p.duration
-           << " мин | Возраст: " << p.ageRestriction << "+";
-        return os;
-    }
-
-    friend std::istream& operator>>(std::istream& is, Performance& p) {
-        std::cout << "Введите название спектакля: ";
-        is.ignore(10000, '\n');
-        std::getline(is, p.title);
-
-        std::cout << "Введите режиссера: ";
-        std::getline(is, p.director);
-
-        std::cout << "Введите жанр: ";
-        std::getline(is, p.genre);
-
-        std::cout << "Введите длительность (в минутах): ";
-        is >> p.duration;
-
-        std::cout << "Введите возрастное ограничение: ";
-        is >> p.ageRestriction;
-
-        return is;
-    }
+    friend std::ostream& operator<<(std::ostream& os, const Performance& p);
+    friend std::istream& operator>>(std::istream& is, Performance& p);
 };
 
 #endif

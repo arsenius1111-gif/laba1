@@ -1,9 +1,9 @@
-#ifndef MAIN_MENU_H
-#define MAIN_MENU_H
+#ifndef MAINMENU_H
+#define MAINMENU_H
 
-#include <vector>
 #include "Hall.h"
 #include "Performance.h"
+#include <vector>
 
 class MainMenu {
 private:

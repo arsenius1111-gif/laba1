@@ -1,114 +1,139 @@
 #include "Hall.h"
+#include <algorithm>
+#include <iostream>
 
-Hall::Hall(int number_, int capacity_) 
+Hall::Hall(int number_, int capacity_)
     : number(number_), capacity(capacity_) {}
 
-int Hall::getNumber() const { return number; }
-int Hall::getCapacity() const { return capacity; }
-int Hall::getTicketsSold() const { return ticketsSold; }
+int Hall::getNumber() const {
+    return number;
+}
 
-void Hall::setNumber(int number_) { number = number_; }
+int Hall::getCapacity() const {
+    return capacity;
+}
+
+int Hall::getTicketsSold() const {
+    return ticketsSold;
+}
 
 void Hall::setCapacity(int newCapacity) {
-    if (newCapacity >= ticketsSold) {
-        capacity = newCapacity;  
-        std::cout << "[Успех]: Новая вместимость установлена: " << capacity << std::endl;
-    } else {
-        std::cout << "[Ошибка]: Вместимость не может быть меньше проданных билетов (" << ticketsSold << ")!\n";
+    if (newCapacity <= 0) {
+        std::cout << "Вместимость должна быть положительной.\n";
+        return;
     }
+
+    if (newCapacity < ticketsSold) {
+        std::cout << "Нельзя установить вместимость меньше "
+                     "количества проданных билетов.\n";
+        return;
+    }
+
+    capacity = newCapacity;
+    std::cout << "Вместимость зала изменена.\n";
 }
 
 bool Hall::sellTickets(int count) {
     if (count <= 0) {
-        std::cout << "\n[Ошибка]: Количество билетов должно быть больше 0!\n";
+        std::cout << "Количество билетов должно быть положительным.\n";
         return false;
     }
 
     if (ticketsSold + count > capacity) {
-        std::cout << "\n[Ошибка вместимости]: Нельзя продать " << count 
-                  << " билетов! Осталось мест: " << (capacity - ticketsSold) 
-                  << " (Вместимость: " << capacity << ").\n";
+        std::cout << "Нельзя продать столько билетов: "
+                     "превышена вместимость зала.\n";
         return false;
     }
 
     ticketsSold += count;
-    std::cout << "\n[Успех]: Продано билетов: " << count 
-              << ". Всего проданных: " << ticketsSold << "/" << capacity << "\n";
+    std::cout << "Билеты успешно проданы.\n";
     return true;
 }
 
 bool Hall::addPerformance(const Performance& p) {
-    size_t initialCount = performances.size();
+    std::size_t initialCount = performances.size();
     *this += p;
     return performances.size() > initialCount;
 }
 
-const std::vector<Performance>& Hall::getPerformances() const { return performances; }
-std::vector<Performance>& Hall::getPerformances() { return performances; }
+const std::vector<Performance>& Hall::getPerformances() const {
+    return performances;
+}
+
+std::vector<Performance>& Hall::getPerformances() {
+    return performances;
+}
 
 void Hall::displayFullInfo() const {
-    std::cout << "\n=== Зал №" << number << " ===" << std::endl;
-    std::cout << "Вместимость: " << capacity << " мест" << std::endl;
-    std::cout << "Продано билетов: " << ticketsSold << " / " << capacity << std::endl;
-    std::cout << "Свободных мест: " << (capacity - ticketsSold) << std::endl;
-    std::cout << "---------------------------" << std::endl;
+    std::cout << "\nЗал №" << number << '\n';
+    std::cout << "Вместимость: " << capacity << '\n';
+    std::cout << "Продано билетов: " << ticketsSold << '\n';
+    std::cout << "Свободных мест: " << capacity - ticketsSold << '\n';
+
+    std::cout << "Репертуар:\n";
 
     if (performances.empty()) {
-        std::cout << "В этом зале пока нет спектаклей." << std::endl;
-    } else {
-        std::cout << "Репертуар зала:" << std::endl;
-        for (size_t i = 0; i < performances.size(); ++i) {
-            std::cout << i + 1 << ". " << performances[i] << std::endl;
-        }
+        std::cout << "Репертуар пуст.\n";
+        return;
+    }
+
+    for (std::size_t i = 0; i < performances.size(); ++i) {
+        std::cout << "\n" << i + 1 << ".\n";
+        std::cout << performances[i];
     }
 }
 
 Hall& Hall::operator+=(const Performance& p) {
-    int totalDuration = 0;
-    for (const auto& existing : performances) {
-        totalDuration += existing.getDuration();
+    int totalDuration = p.getDuration();
+
+    for (const Performance& performance : performances) {
+        totalDuration += performance.getDuration();
     }
 
-    if (totalDuration + p.getDuration() > 480) {
-        std::cout << "\n[Ошибка +=]: Нельзя добавить \"" << p.getTitle() 
-                  << "\". Превышен дневной лимит времени зала (480 мин)!\n"
-                  << "Текущая суммарная длительность: " << totalDuration 
-                  << " мин, пытаемся добавить: " << p.getDuration() << " мин.\n";
+    if (totalDuration > 480) {
+        std::cout << "Нельзя добавить спектакль: общая длительность "
+                     "репертуара превысит 480 минут.\n";
         return *this;
     }
 
     performances.push_back(p);
-    std::cout << "\n[Успех +=]: Спектакль \"" << p.getTitle() << "\" добавлен в Зал №" << number << "!\n";
+    std::cout << "Спектакль добавлен в репертуар.\n";
     return *this;
 }
 
 Hall& Hall::operator-=(const Performance& p) {
-    bool found = false;
-    for (auto it = performances.begin(); it != performances.end(); ++it) {
-        if (*it == p) {
-            performances.erase(it);
-            std::cout << "\n[Успех -=]: Спектакль \"" << p.getTitle() << "\" удален из Зала №" << number << ".\n";
-            found = true;
-            break;
-        }
+    auto it = std::find(performances.begin(), performances.end(), p);
+
+    if (it == performances.end()) {
+        std::cout << "Такого спектакля нет в репертуаре.\n";
+        return *this;
     }
 
-    if (!found) {
-        std::cout << "\n[Ошибка -=]: Спектакль \"" << p.getTitle() << "\" не найден в Зале №" << number << "!\n";
-    }
-
+    performances.erase(it);
+    std::cout << "Спектакль удалён из репертуара.\n";
     return *this;
 }
 
 void printHallAnalytics(const Hall& hall) {
-    std::cout << "\n===== АНАЛИТИКА ЗАЛА №" << hall.number << " (через friend) =====" << std::endl;
-    std::cout << "Загрузка зала: " << (hall.capacity > 0 ? (hall.ticketsSold * 100.0 / hall.capacity) : 0.0) << "%\n";
-    std::cout << "Количество спектаклей: " << hall.performances.size() << std::endl;
-    
-    int totalMinutes = 0;
-    for (const auto& p : hall.performances) {
-        totalMinutes += p.getDuration();
+    double occupancy = 0.0;
+
+    if (hall.capacity > 0) {
+        occupancy = static_cast<double>(hall.ticketsSold)
+            / hall.capacity * 100.0;
     }
-    std::cout << "Суммарная длительность репертуара: " << totalMinutes << " / 480 мин.\n";
-    std::cout << "========================================================\n";
+
+    int totalDuration = 0;
+
+    for (const Performance& performance : hall.performances) {
+        totalDuration += performance.getDuration();
+    }
+
+    std::cout << "\nАналитика зала №" << hall.number << '\n';
+    std::cout << "Продано билетов: " << hall.ticketsSold
+              << " из " << hall.capacity << '\n';
+    std::cout << "Заполняемость: " << occupancy << "%\n";
+    std::cout << "Количество спектаклей: "
+              << hall.performances.size() << '\n';
+    std::cout << "Общая длительность репертуара: "
+              << totalDuration << " мин.\n";
 }

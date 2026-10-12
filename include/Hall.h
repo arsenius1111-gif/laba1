@@ -1,9 +1,8 @@
 #ifndef HALL_H
 #define HALL_H
 
-#include <iostream>
-#include <vector>
 #include "Performance.h"
+#include <vector>
 
 class Hall {
 private:
@@ -13,14 +12,12 @@ private:
     std::vector<Performance> performances;
 
 public:
-    Hall() = default;
     Hall(int number_, int capacity_);
 
     int getNumber() const;
     int getCapacity() const;
     int getTicketsSold() const;
 
-    void setNumber(int number_);
     void setCapacity(int newCapacity);
 
     bool sellTickets(int count);

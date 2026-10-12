@@ -1,8 +1,8 @@
-#ifndef PERFORMANCE_MENU_H
-#define PERFORMANCE_MENU_H
+#ifndef PERFORMANCEMENU_H
+#define PERFORMANCEMENU_H
 
-#include <vector>
 #include "Performance.h"
+#include <vector>
 
 class PerformanceMenu {
 public:
