@@ -236,14 +236,61 @@ void PerformanceMenu::showInheritanceDemo() {
         160, 12, true));
 
     performances.push_back(std::make_shared<Musical>(
-        "Чикаго", "Боб Фосси", 150, 16, true));
+        "Чикаго", "Боб Фосси",
+        150, 16, true));
 
-    std::cout << "\n========== ДЕМОНСТРАЦИЯ ПОЛИМОРФИЗМА ==========\n";
+    int choice = -1;
+    bool running = true;
 
-    for (const auto& performance : performances) {
-        std::cout << "\nТип: " << performance->getType() << '\n';
-        performance->displayInfo();
-        performance->performSpecialAction();
-        std::cout << "----------------------------------------\n";
+    while (running) {
+        std::cout << "\n========== ДЕМОНСТРАЦИЯ ПОЛИМОРФИЗМА ==========\n";
+        std::cout << "1. Посмотреть балет\n";
+        std::cout << "2. Посмотреть оперу\n";
+        std::cout << "3. Посмотреть мюзикл\n";
+        std::cout << "4. Показать все классы\n";
+        std::cout << "0. Назад\n";
+        std::cout << "Выберите действие: ";
+
+        if (!readChoice(choice)) {
+            continue;
+        }
+
+        if (choice == 0) {
+            running = false;
+            continue;
+        }
+
+        if (choice < 1 || choice > 4) {
+            std::cout << "Такого пункта меню нет.\n";
+            continue;
+        }
+
+        std::size_t start = 0;
+        std::size_t end = performances.size();
+
+        if (choice >= 1 && choice <= 3) {
+            start = static_cast<std::size_t>(choice - 1);
+            end = start + 1;
+        }
+
+        for (std::size_t i = start; i < end; ++i) {
+            const std::shared_ptr<Performance>& performance =
+                performances[i];
+
+            std::cout << "\n========================================\n";
+            std::cout << "Тип объекта: " << performance->getType() << '\n';
+            std::cout << "Информация об объекте:\n";
+            performance->displayInfo();
+
+            std::cout << "\nСпециальное действие класса:\n";
+            performance->performSpecialAction();
+
+            std::cout << "========================================\n";
+        }
+
+        std::cout << "\nНажмите Enter для продолжения...";
+        std::cin.ignore(
+            std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin.get();
     }
 }
