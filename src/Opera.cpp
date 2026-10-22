@@ -1,8 +1,13 @@
 #include "Opera.h"
 #include <iostream>
 
-Opera::Opera(std::string_view title_, std::string_view director_,
-    int duration_, int ageRestriction_, bool hasRecitatives_)
+Opera::Opera(
+    std::string_view title_,
+    std::string_view director_,
+    int duration_,
+    int ageRestriction_,
+    bool hasRecitatives_
+)
     : Performance(title_, director_, "Опера", duration_, ageRestriction_),
       hasRecitatives(hasRecitatives_) {}
 
@@ -14,17 +19,25 @@ void Opera::setHasRecitatives(bool value) {
     hasRecitatives = value;
 }
 
-void Opera::displayOperaInfo() const {
-    displayInfo();
+std::string Opera::getType() const {
+    return "Опера";
+}
 
-    std::cout << "Речитативы: "
+void Opera::displayInfo() const {
+    Performance::displayInfo();
+
+    std::cout << "Наличие речитативов: "
               << (hasRecitatives ? "есть" : "нет") << '\n';
 }
 
-void Opera::performVocal() const {
-    std::cout << "\n--- Вокальная часть оперы ---\n";
-    std::cout << "Спектакль: " << getTitle() << '\n';
-    std::cout << "Речитативы: "
-              << (hasRecitatives ? "есть" : "нет") << '\n';
-    std::cout << "Исполняется вокальная партия.\n";
+void Opera::performSpecialAction() const {
+    std::cout << "\n=== Вокальное исполнение ===\n";
+    std::cout << "Опера \"" << getTitle()
+              << "\" исполняется вокально.\n";
+
+    if (hasRecitatives) {
+        std::cout << "В исполнении предусмотрены речитативы.\n";
+    } else {
+        std::cout << "В исполнении нет речитативов.\n";
+    }
 }
