@@ -239,17 +239,17 @@ void PerformanceMenu::showInheritanceDemo() {
         "Чикаго", "Боб Фосси",
         150, 16, true));
 
-    int choice = -1;
     bool running = true;
 
     while (running) {
-        std::cout << "\n========== ДЕМОНСТРАЦИЯ ПОЛИМОРФИЗМА ==========\n";
-        std::cout << "1. Посмотреть балет\n";
-        std::cout << "2. Посмотреть оперу\n";
-        std::cout << "3. Посмотреть мюзикл\n";
-        std::cout << "4. Показать все классы\n";
+        std::cout << "\n========== РАБОТА СО СПЕКТАКЛЯМИ ==========\n";
+        std::cout << "1. Выбрать балет\n";
+        std::cout << "2. Выбрать оперу\n";
+        std::cout << "3. Выбрать мюзикл\n";
         std::cout << "0. Назад\n";
-        std::cout << "Выберите действие: ";
+        std::cout << "Ваш выбор: ";
+
+        int choice = -1;
 
         if (!readChoice(choice)) {
             continue;
@@ -260,37 +260,63 @@ void PerformanceMenu::showInheritanceDemo() {
             continue;
         }
 
-        if (choice < 1 || choice > 4) {
+        if (choice < 1 || choice > 3) {
             std::cout << "Такого пункта меню нет.\n";
             continue;
         }
 
-        std::size_t start = 0;
-        std::size_t end = performances.size();
+        std::shared_ptr<Performance>& performance =
+            performances[static_cast<std::size_t>(choice - 1)];
 
-        if (choice >= 1 && choice <= 3) {
-            start = static_cast<std::size_t>(choice - 1);
-            end = start + 1;
+        bool objectMenu = true;
+
+        while (objectMenu) {
+            std::cout << "\n========== УПРАВЛЕНИЕ: "
+                      << performance->getType() << " ==========\n";
+            std::cout << "1. Показать информацию\n";
+            std::cout << "2. Выполнить специальное действие\n";
+            std::cout << "3. Изменить название\n";
+            std::cout << "0. Назад к выбору типа\n";
+            std::cout << "Ваш выбор: ";
+
+            int action = -1;
+
+            if (!readChoice(action)) {
+                continue;
+            }
+
+            switch (action) {
+            case 1:
+                performance->displayInfo();
+                break;
+
+            case 2:
+                performance->performSpecialAction();
+                break;
+
+            case 3: {
+                std::string title;
+
+                std::cout << "Введите новое название: ";
+                std::cin >> std::ws;
+                std::getline(std::cin, title);
+
+                if (title.empty()) {
+                    std::cout << "Название не может быть пустым.\n";
+                } else {
+                    performance->setTitle(title);
+                    std::cout << "Название успешно изменено.\n";
+                }
+                break;
+            }
+
+            case 0:
+                objectMenu = false;
+                break;
+
+            default:
+                std::cout << "Такого пункта меню нет.\n";
+            }
         }
-
-        for (std::size_t i = start; i < end; ++i) {
-            const std::shared_ptr<Performance>& performance =
-                performances[i];
-
-            std::cout << "\n========================================\n";
-            std::cout << "Тип объекта: " << performance->getType() << '\n';
-            std::cout << "Информация об объекте:\n";
-            performance->displayInfo();
-
-            std::cout << "\nСпециальное действие класса:\n";
-            performance->performSpecialAction();
-
-            std::cout << "========================================\n";
-        }
-
-        std::cout << "\nНажмите Enter для продолжения...";
-        std::cin.ignore(
-            std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cin.get();
     }
 }
