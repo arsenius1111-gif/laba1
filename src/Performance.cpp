@@ -60,7 +60,12 @@ void Performance::setAgeRestriction(int ageRestriction_) {
     }
 }
 
+std::string Performance::getType() const {
+    return "Спектакль";
+}
+
 void Performance::displayInfo() const {
+    std::cout << "Тип: " << getType() << '\n';
     std::cout << "Название: " << title << '\n';
     std::cout << "Режиссёр: " << director << '\n';
     std::cout << "Жанр: " << genre << '\n';
