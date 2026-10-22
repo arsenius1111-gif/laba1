@@ -20,6 +20,8 @@ public:
     Performance(std::string_view title_, std::string_view director_,
         std::string_view genre_, int duration_, int ageRestriction_);
 
+    virtual ~Performance() = default;
+
     std::string getTitle() const;
     std::string getDirector() const;
     std::string getGenre() const;
@@ -32,7 +34,9 @@ public:
     void setDuration(int duration_);
     void setAgeRestriction(int ageRestriction_);
 
-    void displayInfo() const;
+    virtual std::string getType() const;
+    virtual void displayInfo() const;
+    virtual void performSpecialAction() const = 0;
 
     bool operator==(const Performance& other) const;
     std::strong_ordering operator<=>(const Performance& other) const;
