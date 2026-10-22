@@ -7,6 +7,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 namespace {
     bool readChoice(int& choice) {
@@ -134,11 +135,64 @@ namespace {
             return nullptr;
         }
     }
+
+    void managePerformance(Performance& performance) {
+    bool running = true;
+
+        while (running) {
+            std::cout << "\n========== УПРАВЛЕНИЕ: "
+                      << performance.getType() << " ==========\n";
+            std::cout << "1. Показать информацию\n";
+            std::cout << "2. Выполнить специальное действие\n";
+            std::cout << "3. Изменить название\n";
+            std::cout << "0. Назад\n";
+            std::cout << "Ваш выбор: ";
+
+            int action = -1;
+
+            if (!readChoice(action)) {
+                continue;
+            }
+
+            switch (action) {
+            case 1:
+                performance.displayInfo();
+                break;
+
+            case 2:
+                performance.performSpecialAction();
+                break;
+
+            case 3: {
+                std::string title;
+
+                std::cout << "Введите новое название: ";
+                std::cin >> std::ws;
+                std::getline(std::cin, title);
+
+                if (title.empty()) {
+                    std::cout << "Название не может быть пустым.\n";
+                } else {
+                    performance.setTitle(title);
+                    std::cout << "Название успешно изменено.\n";
+                }
+                break;
+            }
+
+            case 0:
+                running = false;
+                break;
+
+            default:
+                std::cout << "Такого пункта меню нет.\n";
+            }
+        }
+    }
 }
 
 void PerformanceMenu::showAll(
     const std::vector<std::shared_ptr<Performance>>& catalog) {
-        std::cout << "\n========== КАТАЛОГ СПЕКТАКЛЕЙ ==========\n";
+    std::cout << "\n========== КАТАЛОГ СПЕКТАКЛЕЙ ==========\n";
 
     if (catalog.empty()) {
         std::cout << "Каталог пуст.\n";
@@ -235,7 +289,8 @@ void PerformanceMenu::showInheritanceDemo() {
         "Евгений Онегин", "Константин Сергеев",
         160, 12, true));
 
-    performances.push_back(std::make_shared<Musical>(
+    performances.
+     push_back(std::make_shared<Musical>(
         "Чикаго", "Боб Фосси",
         150, 16, true));
 
@@ -265,58 +320,9 @@ void PerformanceMenu::showInheritanceDemo() {
             continue;
         }
 
-        std::shared_ptr<Performance>& performance =
+        const std::shared_ptr<Performance>& performance =
             performances[static_cast<std::size_t>(choice - 1)];
 
-        bool objectMenu = true;
-
-        while (objectMenu) {
-            std::cout << "\n========== УПРАВЛЕНИЕ: "
-                      << performance->getType() << " ==========\n";
-            std::cout << "1. Показать информацию\n";
-            std::cout << "2. Выполнить специальное действие\n";
-            std::cout << "3. Изменить название\n";
-            std::cout << "0. Назад к выбору типа\n";
-            std::cout << "Ваш выбор: ";
-
-            int action = -1;
-
-            if (!readChoice(action)) {
-                continue;
-            }
-
-            switch (action) {
-            case 1:
-                performance->displayInfo();
-                break;
-
-            case 2:
-                performance->performSpecialAction();
-                break;
-
-            case 3: {
-                std::string title;
-
-                std::cout << "Введите новое название: ";
-                std::cin >> std::ws;
-                std::getline(std::cin, title);
-
-                if (title.empty()) {
-                    std::cout << "Название не может быть пустым.\n";
-                } else {
-                    performance->setTitle(title);
-                    std::cout << "Название успешно изменено.\n";
-                }
-                break;
-            }
-
-            case 0:
-                objectMenu = false;
-                break;
-
-            default:
-                std::cout << "Такого пункта меню нет.\n";
-            }
-        }
+        managePerformance(*performance);
     }
 }
