@@ -1,7 +1,12 @@
 #include "MainMenu.h"
 #include "HallMenu.h"
 #include "PerformanceMenu.h"
+#include "Ballet.h"
+#include "Musical.h"
+#include "Opera.h"
 #include <iostream>
+#include <memory>
+#include <limits>
 
 MainMenu::MainMenu() {
     initDatabase();
@@ -9,21 +14,25 @@ MainMenu::MainMenu() {
 
 void MainMenu::clearInput() const {
     std::cin.clear();
-    std::cin.ignore(10000, '\n');
+    std::cin.ignore(
+        std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
 void MainMenu::initDatabase() {
     halls.emplace_back(1, 100);
     halls.emplace_back(2, 50);
 
-    catalog.emplace_back(
-        "Гамлет", "Уильям Шекспир", "Трагедия", 150, 16);
-    catalog.emplace_back(
-        "Щелкунчик", "Пётр Чайковский", "Балет", 120, 6);
-    catalog.emplace_back(
-        "Ревизор", "Николай Гоголь", "Комедия", 140, 12);
-    catalog.emplace_back(
-        "Мастер и Маргарита", "Михаил Булгаков", "Драма", 180, 16);
+    catalog.push_back(std::make_shared<Opera>(
+        "Гамлет", "Уильям Шекспир", 150, 16, true));
+
+    catalog.push_back(std::make_shared<Ballet>(
+        "Щелкунчик", "Пётр Чайковский", 120, 6, 24, 2, 30));
+
+    catalog.push_back(std::make_shared<Musical>(
+        "Ревизор", "Николай Гоголь", 140, 12, false));
+
+    catalog.push_back(std::make_shared<Opera>(
+        "Мастер и Маргарита", "Михаил Булгаков", 180, 16, false));
 
     halls[0] += catalog[0];
     halls[0] += catalog[1];
@@ -41,7 +50,7 @@ void MainMenu::run() {
         std::cout << "3. Сравнить спектакли\n";
         std::cout << "4. Добавить спектакль в каталог\n";
         std::cout << "5. Создать зал\n";
-        std::cout << "6. Просмотр типов спектаклей\n";
+        std::cout << "6. Демонстрация полиморфизма\n";
         std::cout << "0. Выход\n";
         std::cout << "Выберите действие: ";
 

@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <iostream>
 #include <ranges>
+#include <utility>
 
 Hall::Hall(int number_, int capacity_)
     : number(number_), capacity(capacity_) {}
@@ -51,17 +52,24 @@ bool Hall::sellTickets(int count) {
     return true;
 }
 
-bool Hall::addPerformance(const Performance& p) {
+bool Hall::addPerformance(std::shared_ptr<Performance> p) {
+    if (!p) {
+        std::cout << "Не удалось добавить спектакль.\n";
+        return false;
+    }
+
     std::size_t initialCount = performances.size();
-    *this += p;
+    *this += std::move(p);
     return performances.size() > initialCount;
 }
 
-const std::vector<Performance>& Hall::getPerformances() const {
+const std::vector<std::shared_ptr<Performance>>&
+Hall::getPerformances() const {
     return performances;
 }
 
-std::vector<Performance>& Hall::getPerformances() {
+std::vector<std::shared_ptr<Performance>>&
+Hall::getPerformances() {
     return performances;
 }
 
@@ -79,15 +87,25 @@ void Hall::displayFullInfo() const {
 
     for (std::size_t i = 0; i < performances.size(); ++i) {
         std::cout << "\n" << i + 1 << ".\n";
-        std::cout << performances[i];
+
+        if (performances[i]) {
+            performances[i]->displayInfo();
+        }
     }
 }
 
-Hall& Hall::operator+=(const Performance& p) {
-    int totalDuration = p.getDuration();
+Hall& Hall::operator+=(std::shared_ptr<Performance> p) {
+    if (!p) {
+        std::cout << "Не удалось добавить спектакль.\n";
+        return *this;
+    }
 
-    for (const Performance& performance : performances) {
-        totalDuration += performance.getDuration();
+    int totalDuration = p->getDuration();
+
+    for (const auto& performance : performances) {
+        if (performance) {
+            totalDuration += performance->getDuration();
+        }
     }
 
     if (totalDuration > 480) {
@@ -96,13 +114,17 @@ Hall& Hall::operator+=(const Performance& p) {
         return *this;
     }
 
-    performances.push_back(p);
+    performances.push_back(std::move(p));
     std::cout << "Спектакль добавлен в репертуар.\n";
     return *this;
 }
 
 Hall& Hall::operator-=(const Performance& p) {
-    auto it = std::ranges::find(performances, p);
+    auto it = std::ranges::find_if(
+        performances,
+        [&p](const std::shared_ptr<Performance>& performance) {
+            return performance && *performance == p;
+        });
 
     if (it == performances.end()) {
         std::cout << "Такого спектакля нет в репертуаре.\n";
@@ -124,8 +146,10 @@ void printHallAnalytics(const Hall& hall) {
 
     int totalDuration = 0;
 
-    for (const Performance& performance : hall.performances) {
-        totalDuration += performance.getDuration();
+    for (const auto& performance : hall.performances) {
+        if (performance) {
+            totalDuration += performance->getDuration();
+        }
     }
 
     std::cout << "\nАналитика зала №" << hall.number << '\n';
@@ -133,7 +157,8 @@ void printHallAnalytics(const Hall& hall) {
               << " из " << hall.capacity << '\n';
     std::cout << "Заполняемость: " << occupancy << "%\n";
     std::cout << "Количество спектаклей: "
-              << hall.performances.size() << '\n';
+              << hall.
+              performances.size() << '\n';
     std::cout << "Общая длительность репертуара: "
               << totalDuration << " мин.\n";
 }

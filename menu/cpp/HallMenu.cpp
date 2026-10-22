@@ -1,6 +1,8 @@
 #include "HallMenu.h"
 #include <iostream>
 #include <limits>
+#include <memory>
+#include <vector>
 
 namespace {
     bool readNumber(int& value) {
@@ -11,6 +13,7 @@ namespace {
         std::cin.clear();
         std::cin.ignore(
             std::numeric_limits<std::streamsize>::max(), '\n');
+
         std::cout << "Ошибка ввода. Введите целое число.\n";
         return false;
     }
@@ -46,7 +49,8 @@ namespace {
     }
 
     bool selectPerformance(
-        const std::vector<Performance>& catalog, int& index) {
+        const std::vector<std::shared_ptr<Performance>>& catalog,
+        int& index) {
         if (catalog.empty()) {
             std::cout << "Каталог спектаклей пуст.\n";
             return false;
@@ -55,9 +59,12 @@ namespace {
         std::cout << "\nКаталог спектаклей:\n";
 
         for (std::size_t i = 0; i < catalog.size(); ++i) {
-            std::cout << i + 1 << ". "
-                      << catalog[i].getTitle() << " — "
-                      << catalog[i].getDuration() << " мин.\n";
+            if (catalog[i]) {
+                std::cout << i + 1 << ". "
+                          << catalog[i]->getTitle() << " — "
+                          << catalog[i]->getDuration() << " мин. ("
+                          << catalog[i]->getType() << ")\n";
+            }
         }
 
         std::cout << "Выберите номер спектакля: ";
@@ -72,6 +79,12 @@ namespace {
         }
 
         --index;
+
+        if (!catalog[static_cast<std::size_t>(index)]) {
+            std::cout << "Не удалось получить спектакль.\n";
+            return false;
+        }
+
         return true;
     }
 
@@ -85,7 +98,8 @@ namespace {
     }
 
     void addPerformance(
-        Hall& hall, const std::vector<Performance>& catalog) {
+        Hall& hall,
+        const std::vector<std::shared_ptr<Performance>>& catalog) {
         int index = 0;
 
         if (selectPerformance(catalog, index)) {
@@ -104,8 +118,11 @@ namespace {
         std::cout << "\nРепертуар зала:\n";
 
         for (std::size_t i = 0; i < performances.size(); ++i) {
-            std::cout << i + 1 << ". "
-                      << performances[i].getTitle() << '\n';
+            if (performances[i]) {
+                std::cout << i + 1 << ". "
+                          << performances[i]->getTitle() << " ("
+                          << performances[i]->getType() << ")\n";
+            }
         }
 
         int index = 0;
@@ -115,15 +132,20 @@ namespace {
             return;
         }
 
-        if (index < 1 ||
-            index > static_cast<int>(performances.size())) {
+        if (index < 1 || index > static_cast<int>(performances.size())) {
             std::cout << "Указан неверный номер спектакля.\n";
             return;
         }
 
-        Performance selected =
+        const auto& selected =
             performances[static_cast<std::size_t>(index - 1)];
-        hall -= selected;
+
+        if (!selected) {
+            std::cout << "Не удалось получить спектакль.\n";
+            return;
+        }
+
+        hall -= *selected;
     }
 
     void changeCapacity(Hall& hall) {
@@ -147,9 +169,11 @@ namespace {
     }
 
     void processHallChoice(
-        int choice, Hall& hall,
-        const std::vector<Performance>& catalog, bool& running) {
-            switch (choice) {
+        int choice,
+        Hall& hall,
+        const std::vector<std::shared_ptr<Performance>>& catalog,
+        bool& running) {
+        switch (choice) {
         case 1:
             hall.displayFullInfo();
             break;
@@ -217,7 +241,7 @@ void HallMenu::create(std::vector<Hall>& halls) {
 
 void HallMenu::manage(
     std::vector<Hall>& halls,
-    const std::vector<Performance>& catalog) {
+    const std::vector<std::shared_ptr<Performance>>& catalog) {
     int index = 0;
 
     if (!selectHall(halls, index)) {

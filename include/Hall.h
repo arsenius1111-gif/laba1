@@ -2,6 +2,7 @@
 #define HALL_H
 
 #include "Performance.h"
+#include <memory>
 #include <vector>
 
 class Hall {
@@ -9,7 +10,7 @@ private:
     int number = 0;
     int capacity = 0;
     int ticketsSold = 0;
-    std::vector<Performance> performances;
+    std::vector<std::shared_ptr<Performance>> performances;
 
 public:
     Hall(int number_, int capacity_);
@@ -21,14 +22,17 @@ public:
     void setCapacity(int newCapacity);
 
     bool sellTickets(int count);
-    bool addPerformance(const Performance& p);
+    bool addPerformance(std::shared_ptr<Performance> p);
 
-    const std::vector<Performance>& getPerformances() const;
-    std::vector<Performance>& getPerformances();
+    const std::vector<std::shared_ptr<Performance>>&
+        getPerformances() const;
+
+    std::vector<std::shared_ptr<Performance>>&
+        getPerformances();
 
     void displayFullInfo() const;
 
-    Hall& operator+=(const Performance& p);
+    Hall& operator+=(std::shared_ptr<Performance> p);
     Hall& operator-=(const Performance& p);
 
     friend void printHallAnalytics(const Hall& hall);
