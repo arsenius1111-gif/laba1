@@ -6,6 +6,7 @@
 #include <limits>
 #include <memory>
 #include <string>
+#include <utility>
 
 namespace {
     bool readChoice(int& choice) {
@@ -18,22 +19,6 @@ namespace {
             std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << "Ошибка ввода. Введите число.\n";
         return false;
-    }
-
-    void changeTitle(Performance& performance) {
-        std::string title;
-
-        std::cout << "Введите новое название: ";
-        std::cin >> std::ws;
-        std::getline(std::cin, title);
-
-        if (title.empty()) {
-            std::cout << "Название не может быть пустым.\n";
-            return;
-        }
-
-        performance.setTitle(title);
-        std::cout << "Название изменено.\n";
     }
 
     std::shared_ptr<Performance> createPerformance() {
@@ -149,106 +134,11 @@ namespace {
             return nullptr;
         }
     }
-
-    void showBallet() {
-        Ballet ballet(
-            "Лебединое озеро", "Мариус Петипа",
-            140, 6, 24, 4, 30);
-
-        bool running = true;
-
-        while (running) {
-            std::cout << "\n========== БАЛЕТ ==========\n";
-            ballet.displayInfo();
-            ballet.performSpecialAction();
-
-            int choice = -1;
-            std::cout << "\n1. Изменить название\n0. Назад\n";
-
-            if (!readChoice(choice)) {
-                continue;
-            }
-
-            switch (choice) {
-            case 1:
-                changeTitle(ballet);
-                break;
-            case 0:
-                running = false;
-                break;
-            default:
-                std::cout << "Такого пункта меню нет.\n";
-            }
-        }
-    }
-
-    void showOpera() {
-        Opera opera(
-            "Евгений Онегин", "Константин Сергеев",
-            160, 12, true);
-
-        bool running = true;
-
-        while (running) {
-            std::cout << "\n========== ОПЕРА ==========\n";
-            opera.displayInfo();
-            opera.performSpecialAction();
-
-            int choice = -1;
-            std::cout << "\n1. Изменить название\n0. Назад\n";
-
-            if (!readChoice(choice)) {
-                continue;
-            }
-
-            switch (choice) {
-            case 1:
-                changeTitle(opera);
-                break;
-            case 0:
-                running = false;
-                break;
-            default:
-                std::cout << "Такого пункта меню нет.\n";
-            }
-        }
-    }
-
-    void showMusical() {
-        Musical musical(
-            "Чикаго", "Боб Фосси", 150, 16, true);
-
-        bool running = true;
-
-        while (running) {
-            std::cout << "\n========== МЮЗИКЛ ==========\n";
-            musical.displayInfo();
-            musical.performSpecialAction();
-
-            int choice = -1;
-            std::cout << "\n1. Изменить название\n0. Назад\n";
-
-            if (!readChoice(choice)) {
-                continue;
-            }
-
-            switch (choice) {
-            case 1:
-                changeTitle(musical);
-                break;
-            case 0:
-                running = false;
-                break;
-            default:
-                std::cout << "Такого пункта меню нет.\n";
-            }
-        }
-    }
 }
 
 void PerformanceMenu::showAll(
     const std::vector<std::shared_ptr<Performance>>& catalog) {
-    std::cout << "\n========== КАТАЛОГ СПЕКТАКЛЕЙ ==========\n";
+        std::cout << "\n========== КАТАЛОГ СПЕКТАКЛЕЙ ==========\n";
 
     if (catalog.empty()) {
         std::cout << "Каталог пуст.\n";
@@ -304,7 +194,7 @@ void PerformanceMenu::compare(
     }
 
     if (i1 < 1 || i1 > static_cast<int>(catalog.size()) ||
-    i2 < 1 || i2 > static_cast<int>(catalog.size())) {
+        i2 < 1 || i2 > static_cast<int>(catalog.size())) {
         std::cout << "Указан неверный номер спектакля.\n";
         return;
     }
