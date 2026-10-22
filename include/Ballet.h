@@ -6,16 +6,31 @@
 class Ballet : public Performance {
 private:
     int dancersCount = 0;
+    int actsCount = 0;
+    int orchestraSize = 0;
 
 public:
-    Ballet(std::string_view title_, std::string_view director_,
-        int duration_, int ageRestriction_, int dancersCount_);
+    Ballet(
+        std::string_view title_,
+        std::string_view director_,
+        int duration_,
+        int ageRestriction_,
+        int dancersCount_,
+        int actsCount_,
+        int orchestraSize_
+    );
 
     int getDancersCount() const;
-    void setDancersCount(int value);
+    int getActsCount() const;
+    int getOrchestraSize() const;
 
-    void displayBalletInfo() const;
-    void performDance() const;
+    void setDancersCount(int value);
+    void setActsCount(int value);
+    void setOrchestraSize(int value);
+
+    std::string getType() const override;
+    void displayInfo() const override;
+    void performSpecialAction() const override;
 };
 
 #endif

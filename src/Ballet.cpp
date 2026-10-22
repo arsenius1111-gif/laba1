@@ -1,31 +1,65 @@
 #include "Ballet.h"
 #include <iostream>
 
-Ballet::Ballet(std::string_view title_, std::string_view director_,
-    int duration_, int ageRestriction_, int dancersCount_)
+Ballet::Ballet(
+    std::string_view title_,
+    std::string_view director_,
+    int duration_,
+    int ageRestriction_,
+    int dancersCount_,
+    int actsCount_,
+    int orchestraSize_
+)
     : Performance(title_, director_, "Балет", duration_, ageRestriction_),
-      dancersCount(dancersCount_) {}
+      dancersCount(dancersCount_),
+      actsCount(actsCount_),
+      orchestraSize(orchestraSize_) {}
 
 int Ballet::getDancersCount() const {
     return dancersCount;
 }
 
+int Ballet::getActsCount() const {
+    return actsCount;
+}
+
+int Ballet::getOrchestraSize() const {
+    return orchestraSize;
+}
+
 void Ballet::setDancersCount(int value) {
-    if (value > 0) {
-        dancersCount = value;
-    } else {
-        std::cout << "Количество танцоров должно быть положительным.\n";
-    }
+    dancersCount = value;
 }
 
-void Ballet::displayBalletInfo() const {
-    displayInfo();
-    std::cout << "Количество танцоров: " << dancersCount << '\n';
+void Ballet::setActsCount(int value) {
+    actsCount = value;
 }
 
-void Ballet::performDance() const {
-    std::cout << "\n--- Танцевальная часть балета ---\n";
-    std::cout << "Спектакль: " << getTitle() << '\n';
-    std::cout << "Количество танцоров: " << dancersCount << '\n';
-    std::cout << "Исполняется танцевальная сцена.\n";
+void Ballet::setOrchestraSize(int value) {
+    orchestraSize = value;
+}
+
+std::string Ballet::getType() const {
+    return "Балет";
+}
+
+void Ballet::displayInfo() const {
+    Performance::displayInfo();
+
+    std::cout << "Количество танцоров: "
+              << dancersCount << '\n';
+
+    std::cout << "Количество актов: "
+              << actsCount << '\n';
+
+    std::cout << "Размер оркестра: "
+              << orchestraSize << '\n';
+}
+
+void Ballet::performSpecialAction() const {
+    std::cout << "\n=== Танцевальное выступление ===\n";
+    std::cout << "Балет \"" << getTitle()
+              << "\" исполняется "
+              << dancersCount
+              << " танцорами.\n";
 }
