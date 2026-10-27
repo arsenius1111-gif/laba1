@@ -55,7 +55,7 @@ void Ballet::displayInfo() const {
     std::cout << "Размер оркестра: "
               << orchestraSize << '\n';
 }
-
+  
 void Ballet::performSpecialAction() const {
     std::cout << "\n=== Танцевальное выступление ===\n";
     std::cout << "Балет \"" << getTitle()
